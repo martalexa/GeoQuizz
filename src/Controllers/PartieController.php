@@ -54,5 +54,22 @@ class PartieController extends BaseController
 
 		}
 	}
-	
+	public function updateScore($request,$response,$args) {
+		$tab = $request->getParsedBody();
+		try {
+			$partie = Partie::where("id","=",$args["id"])->firstOrFail();
+		} catch (ModelNotFoundException $e) {
+						$notFoundHandler = $this->container->get('notFoundHandler');
+			return $notFoundHandler($req,$resp);
+		}
+		try {
+			$partie->score =filter_var($tab["score"],FILTER_SANITIZE_NUMBER_FLOAT);
+			$partie->save();
+				return Writer::json_output($response,200,$partie);
+		} catch (Exception $e) {
+			$response = $response->withHeader('Content-Type','application/json')->withStatus(500);
+			$response->getBody()->write(json_encode(['type' => 'error', 'error' => 500, 'message' => $e->getMessage()]));
+		}
+		
+	}
 }
