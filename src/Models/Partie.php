@@ -21,4 +21,11 @@ class Partie extends Model {
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+    public function serie(){
+        return $this->belongsTo(Serie::class, 'serie_id');
+    }
+
+    public function photos(){
+        return $this->hasMany(Photo::class, 'partie_id');
+    }
 }
