@@ -47,7 +47,7 @@ class SerieController extends BaseController
             return Writer::json_output($response,201,$serie);
 
         } catch (\Exception $e){
-            // revoyer erreur format jsno
+            // revoyer erreur format json
            return Writer::json_output($response,500,['error' => 'Internal Server Error']);
         }
     }
