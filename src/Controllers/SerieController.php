@@ -18,7 +18,7 @@ class SerieController extends BaseController
 {
 	public function getSeries ($request,$response) {
 		$series = Serie::select()->get();
-		return $response->getBody()->write(json_encode($parties->toArray()));
+		return Writer::json_output($response,201,$series);
 
 	}
 	public function getSerie($request,$response,$args) {

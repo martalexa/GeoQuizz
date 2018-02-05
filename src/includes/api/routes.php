@@ -6,4 +6,4 @@
 	$app->post('/parties[/]','PartieController:createPartie')->setName('post_partie');
 
 	$app->post('/serie[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
-
+	$app->get('/serie[/]', 'SerieController:getSeries')->setName('get_series');
