@@ -12,7 +12,7 @@ $capsule->addConnection([
     'password'  => 'admin',
     'charset'   => 'utf8',
     'collation' => 'utf8_general_ci',
-    'prefix'    => 'geo',
+    'prefix'    => 'geo_',
 ]);
 
 $capsule->setAsGlobal();
