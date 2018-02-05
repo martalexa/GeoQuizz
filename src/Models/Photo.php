@@ -5,8 +5,9 @@
  * Date: 05/02/18
  * Time: 11:51
  */
+namespace App\Models;
 use \Illuminate\Database\Eloquent\Model;
-class Photo
+class Photo extends Model
 {
     protected $table = 'photo';
     protected $primaryKey = 'id';

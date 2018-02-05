@@ -5,8 +5,9 @@
  * Date: 05/02/18
  * Time: 11:57
  */
+namespace App\Models;
 use \Illuminate\Database\Eloquent\Model;
-class City
+class City extends Model
 {
     protected $table = 'city';
     protected $primaryKey = 'id';
