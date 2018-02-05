@@ -1,8 +1,7 @@
-#!/usr/bin/env php
 <?php
 
-require __DIR__ .'/vendor/autoload.php';
-require __DIR__ .'/src/includes/db.php';
+require __DIR__ .'/../vendor/autoload.php';
+require __DIR__ .'/../src/includes/db.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
@@ -99,4 +98,5 @@ $migrator = new Migrator();
 
 $migrator->migrate();
 
-print("Migration Successfully");
+header('Content-type: application/json');
+echo json_encode(array('message' => 'Le schéma de la base de données a bien été créé'));
