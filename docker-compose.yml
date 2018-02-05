@@ -1,5 +1,5 @@
 #
-# docker-compose file pour le déploiement initial de l'application Atelier2
+# docker-compose file pour le déploiement initial de l'application geoquizz2
 # Documentation complète : https://bitbucket.org/canals5/docker-things
 #
 # ajouter les vhosts des services web dans le fichier /etc/vhosts
@@ -13,15 +13,15 @@
 
 version: "2"
 networks:
-  atelier_network:
+  geoquizz_network:
     driver: bridge
 
 services:
   api.public:
     image: canals/php
-    container_name: api.atelier.local
+    container_name: api.geoquizz.local
     environment:
-      - VHOST_HOSTNAME=api.atelier.local
+      - VHOST_HOSTNAME=api.geoquizz.local
       - VHOST_DOCROOT=/var/www/api
 #     - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
 #     - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
@@ -31,8 +31,9 @@ services:
     volumes :
       - ./api:/var/www/api
       - ./src:/var/www/src
+      - ./vendor:/var/www/vendor
     networks:
-      - atelier_network
+      - geoquizz_network
     links :
       - mysql:db
 
@@ -41,7 +42,7 @@ services:
 #############################
   mysql:
     image: mariadb:latest
-    container_name: maria.atelier.local
+    container_name: maria.geoquizz.local
     environment:
       - MYSQL_ROOT_PASSWORD=root123
       - MYSQL_USER=lbs
@@ -50,14 +51,14 @@ services:
     ports:
       - "3603:3306"
     networks:
-      - atelier_network
+      - geoquizz_network
 
   adminer:
      image: adminer
-     container_name: admin.atelier.local
+     container_name: admin.geoquizz.local
      ports:
        - "8080:8080"
      networks:
-      - atelier_network
+      - geoquizz_network
      links:
        - mysql:db
