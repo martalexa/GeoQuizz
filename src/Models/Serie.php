@@ -19,4 +19,8 @@ class Serie extends Model
     public function photos(){
         return $this->hasMany(Photo::class, 'serie_id');
     }
+
+    public function city(){
+        return $this->belongsTo(City::class, 'city_id');
+    }
 }

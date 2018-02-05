@@ -6,11 +6,15 @@
  * Time: 11:57
  */
 use \Illuminate\Database\Eloquent\Model;
-class Ville
+class City
 {
-    protected $table = 'ville';
+    protected $table = 'city';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+
+    public function series(){
+        return $this->hasMany(Serie::class,'city_id');
+    }
 
 }
