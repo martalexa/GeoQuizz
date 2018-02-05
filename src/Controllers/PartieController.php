@@ -14,23 +14,15 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PartieController extends BaseController
 {
-<<<<<<< HEAD
+
 	public function getParties($request, $response, $args){
 		$parties = Partie::select()->get();
 		return Writer::json_output($response,200,$parties);
-		
-=======
-
-    public function getParties($request, $response, $args){
-
-		return $response->withJson(array('status' => '200 OK'));
->>>>>>> d9e5e25313bb88bd139025e92f82f773010c5049
 	}
 
 	public function getPartie($request,$response,$args) {
 		try {
 			$partie = Partie::where("id","=",$args['id'])->firstOrFail();
-<<<<<<< HEAD
 			return Writer::json_output($response,200,$partie);
 			
 		} catch (ModelNotFoundException $exception){
@@ -39,16 +31,6 @@ class PartieController extends BaseController
 			return $notFoundHandler($req,$resp);
 		}
 
-=======
-		    $response = $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-		    $response->getBody()->write(json_encode($partie->toArray()));
-			
-		} catch (ModelNotFoundException $exception){
-
-        $notFoundHandler = $this->container->get('notFoundHandler');
-        return $notFoundHandler($request,$response);
-      }
->>>>>>> d9e5e25313bb88bd139025e92f82f773010c5049
 	}
 
 	public function createPartie($request,$response) {
