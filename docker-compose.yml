@@ -21,44 +21,46 @@ services:
     image: canals/php
     container_name: api.geoquizz.local
     environment:
-      - VHOST_HOSTNAME=api.geoquizz.local
-      - VHOST_DOCROOT=/var/www/api
-#     - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
-#     - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+        - VHOST_HOSTNAME=api.geoquizz.local
+        - VHOST_DOCROOT=/var/www/api
+#       - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+#       - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
     ports:
-      - "10080:80"
-      - "10443:443"
+        - "10080:80"
+        - "10443:443"
     volumes :
-      - ./api:/var/www/api
-      - ./src:/var/www/src
-      - ./vendor:/var/www/vendor
+        - ./api:/var/www/api
+        - ./src:/var/www/src
+        - ./vendor:/var/www/vendor
     networks:
-      - geoquizz_network
+        - geoquizz_network
     links :
-      - mysql:db
+        - mysql:geoquizz
 
 #############################
 # mysql + adminer / can be replaced by mariadb
 #############################
   mysql:
     image: mariadb:latest
-    container_name: maria.geoquizz.local
+    container_name: db.geoquizz.local
     environment:
-      - MYSQL_ROOT_PASSWORD=root123
-      - MYSQL_USER=lbs
-      - MYSQL_PASSWORD=lbs
-      - MYSQL_DATABASE=lbs
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_USER=admin
+          - MYSQL_PASSWORD=admin
+          - MYSQL_DATABASE=geoquizz
     ports:
-      - "3603:3306"
+          - "3603:3306"
     networks:
-      - geoquizz_network
+          - geoquizz_network
+    volumes :
+          - ./data:/var/data
 
   adminer:
      image: adminer
      container_name: admin.geoquizz.local
      ports:
-       - "8080:8080"
+          - "8082:8080"
      networks:
-      - geoquizz_network
+          - geoquizz_network
      links:
-       - mysql:db
+          - mysql:geoquizz
