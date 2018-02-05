@@ -7,16 +7,17 @@
  * @author: canals
  */
 
+namespace App\Models;
 use \Illuminate\Database\Eloquent\Model;
 
 
 /**
  * Class Categorie
- * @package catawish\models
+ * @package Api\models
  */
 class Partie extends Model {
 
-    protected $table = 'carte';
+    protected $table = 'partie';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
