@@ -11,22 +11,7 @@ class Migrator {
      * migrate the database schema
      */
     public function migrate() {
-        /**
-         * create table for series
-         */
-        if (!Capsule::schema()->hasTable('serie')) {
-            Capsule::schema()->create('serie', function($table)
-            {
-
-                $table->integer('id', true);
-                $table->string('distance')->default('');
-                $table->timestamp('updated_at')->default(Capsule::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-                $table->timestamp('created_at')->default(Capsule::raw('CURRENT_TIMESTAMP'));
-                // We'll need to ensure that MySQL uses the InnoDB engine to
-                // support the indexes, other engines aren't affected.
-                $table->engine = 'InnoDB';
-            });
-        }
+        
 
         /**
          * create table for cities
@@ -39,13 +24,30 @@ class Migrator {
                 $table->string('lat');
                 $table->string('lng');
                 $table->integer('zoom_level');
+            });
+        }
+
+        /**
+         * create table for series
+         */
+        if (!Capsule::schema()->hasTable('serie')) {
+            Capsule::schema()->create('serie', function($table)
+            {
+
+                $table->integer('id', true);
+                $table->string('distance')->default('');
+                $table->timestamp('updated_at')->default(Capsule::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+                $table->timestamp('created_at')->default(Capsule::raw('CURRENT_TIMESTAMP'));
                 //FK
-                $table->integer('serie_id');
+                $table->integer('city_id');
 
                 $table->engine = 'InnoDB';
 
                 //Foreign keys declaration
-                $table->foreign('serie_id')->references('id')->on('serie')->onDelete('cascade');
+                $table->foreign('city_id')->references('id')->on('city')->onDelete('cascade');
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
             });
         }
 
