@@ -23,11 +23,14 @@ class PartieController extends BaseController
 	public function getPartie($request,$response,$args) {
 		try {
 
-			$partie = Partie::where("id","=",$args['id'])->firstOrFail();
-						$result = array("partie"=>$partie);
+			$partie = Partie::select()->where("id","=",$args['id'])->firstOrFail();
+			$result = $partie;
 			$serie = $partie->serie()->first();
-			$result["serie"] = $serie;
-			$result["photos"]= $serie->photos()->get();
+			$result->serie = $serie;
+			$result->serie->city= $serie->city()->select("zoom_level","name","lat","lng")->first();
+			$result->serie->photos= $serie->photos()->select("description","url","lat","lng")->get();
+
+
 			return Writer::json_output($response,200,$result);
 			
 		} catch (ModelNotFoundException $exception){
@@ -50,8 +53,8 @@ class PartieController extends BaseController
 
 		try{
 			$partie->save();
-					return Writer::json_output($response,200,$partie);
-	
+			return Writer::json_output($response,200,$partie);
+
 
 		} catch (\Exception $e){
 			$response = $response->withHeader('Content-Type','application/json')->withStatus(500);
@@ -64,13 +67,13 @@ class PartieController extends BaseController
 		try {
 			$partie = Partie::where("id","=",$args["id"])->firstOrFail();
 		} catch (ModelNotFoundException $e) {
-						$notFoundHandler = $this->container->get('notFoundHandler');
+			$notFoundHandler = $this->container->get('notFoundHandler');
 			return $notFoundHandler($req,$resp);
 		}
 		try {
 			$partie->score =filter_var($tab["score"],FILTER_SANITIZE_NUMBER_FLOAT);
 			$partie->save();
-				return Writer::json_output($response,200,$partie);
+			return Writer::json_output($response,200,$partie);
 		} catch (Exception $e) {
 			$response = $response->withHeader('Content-Type','application/json')->withStatus(500);
 			$response->getBody()->write(json_encode(['type' => 'error', 'error' => 500, 'message' => $e->getMessage()]));
