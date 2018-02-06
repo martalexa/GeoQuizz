@@ -21,8 +21,8 @@ class SerieController extends BaseController
 		$series = Serie::select()->get();
 		foreach ($series as $serie) {
 
-	$result_temp = array('serie' => $serie,);
-	$result_temp["serie"]->city_name = $serie->city()->select("name")->first()->name;
+	$result_temp =  $serie;
+	$result_temp->city_name = $serie->city()->select("name")->first()->name;
 			array_push($result,$result_temp);
 
 		}
