@@ -14,3 +14,4 @@
 
 // Routes User
 	$app->post('/user[/]', 'UserController:createUser')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['username','password']);
+    $app->get('/user[/]', 'UserController:connectUser');
