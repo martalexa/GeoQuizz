@@ -31,6 +31,7 @@ services:
     volumes :
         - ./api:/var/www/api
         - ./src:/var/www/src
+        - ./web:/var/www/web
         - ./vendor:/var/www/vendor
     networks:
         - geoquizz_network
