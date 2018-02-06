@@ -28,7 +28,13 @@ class PartieController extends BaseController
 			$serie = $partie->serie()->first();
 			$result->serie = $serie;
 			$result->serie->city= $serie->city()->select("zoom_level","name","lat","lng")->first();
-			$result->serie->photos= $serie->photos()->select("description","url","lat","lng")->get();
+			$photos = $serie->photos()->select("description","url","lat","lng")->get();
+			foreach($photos as $key => $photo){
+				$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
+				$photos[$key] = $photo;
+			}
+			$result->serie->photos = $photos;
+			//$result->serie->photos= $serie->photos()->select("description","url","lat","lng")->get();
 
 
 			return Writer::json_output($response,200,$result);

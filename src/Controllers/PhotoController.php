@@ -13,11 +13,11 @@ use Symfony\Component\Translation\Dumper\PoFileDumper;
 
 class PhotoController extends BaseController
 {
-
+/*
    public function customError($errno, $errstr) {
       echo "<b>Error:</b> [$errno] $errstr<br>";
-      die;
-  } 
+      exit(403);
+  } */
 
   public function base64_to_jpeg($base64_string, $output_file)
   {
@@ -30,12 +30,12 @@ class PhotoController extends BaseController
 public function check_base64_image($base64, $response)
 {
         //todo : desactiver les warnings
-  set_error_handler($this->customError(2,"Error, try again"));
-    if (imagecreatefromstring(base64_decode($base64))) {
-        return true;
-    } else {
-        return false;
-    }
+    error_reporting(0);
+  if (imagecreatefromstring(base64_decode($base64))) {
+    return true;
+} else {
+    return false;
+}
 
 }
 
@@ -46,16 +46,11 @@ public function createPhoto($request, $response, $args)
 
     $photo_str = $tab['photo'];
 
-
     $test = $this->check_base64_image($photo_str, $response);
     if ($test) {
-
         $photo_str = base64_decode($photo_str);
-
-
         $picture = new Photo();
         $picture->url = Uuid::uuid1() . '.png';
-
         if (isset($tab['description']) && !empty($tab['description'])) {
             $picture->description = filter_var($tab['description'], FILTER_SANITIZE_SPECIAL_CHARS);
         }
@@ -64,23 +59,22 @@ public function createPhoto($request, $response, $args)
         $picture->serie_id = filter_var($tab['serie_id'], FILTER_SANITIZE_NUMBER_INT);
 
         file_put_contents($this->get('upload_path') . '/' . $picture->url, $photo_str);
-       
+
 
         try {
-
             $picture->save();
-             $picture->url = $this->get('assets_path') . '/uploads/' . $picture->url;
+            $picture->url = $this->get('assets_path') . '/uploads/' . $picture->url;
             return Writer::json_output($response, 201, $picture);
+
+
 
         } catch (\Exception $e) {
             $response = $response->withHeader('Content-Type', 'application/json')->withStatus(500);
         }
 
-
-            //todo: voir pour la redirection sur l'interface graphique
-
     } else {
         return Writer::json_output($response,403,['error' => "Forbidden "]);
     }
+
 }
 }
