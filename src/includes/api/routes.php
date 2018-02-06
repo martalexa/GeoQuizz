@@ -7,7 +7,7 @@
 	$app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
 	$app->post('/serie[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
-	$app->get('/serie[/]', 'SerieController:getSeries')->setName('get_series');
+	$app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 
 // Routes User
 	$app->post('/user[/]', 'UserController:createUser')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['username','password']);

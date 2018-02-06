@@ -17,13 +17,23 @@ use Slim\Http\Response;
 class SerieController extends BaseController
 {
 	public function getSeries ($request,$response) {
+		$result = array();
 		$series = Serie::select()->get();
-		return Writer::json_output($response,201,$series);
+		foreach ($series as $serie) {
+
+	$result_temp = array('serie' => $serie,);
+	$result_temp["serie"]->city_name = $serie->city()->select("name")->first()->name;
+			array_push($result,$result_temp);
+
+		}
+		return Writer::json_output($response,201,$result);
 
 	}
 	public function getSerie($request,$response,$args) {
 		try {
 			$serie = Serie::where("id","=",$args["id"])->firstOrFail();
+
+			 return Writer::json_output($response,201,$serie);
 		} catch (ModelNotFoundException $e) {
 			$notFoundHandler = $this->container->get('notFoundHandler');
 			return $notFoundHandler($request,$response);
