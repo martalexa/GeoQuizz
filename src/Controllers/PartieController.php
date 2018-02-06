@@ -24,9 +24,10 @@ class PartieController extends BaseController
 		try {
 
 			$partie = Partie::where("id","=",$args['id'])->firstOrFail();
-						$result = array("Partie"=>$partie);
+						$result = array("partie"=>$partie);
 			$serie = $partie->serie()->first();
 			$result["serie"] = $serie;
+			$result["photos"]= $serie->photos()->get();
 			return Writer::json_output($response,200,$result);
 			
 		} catch (ModelNotFoundException $exception){
