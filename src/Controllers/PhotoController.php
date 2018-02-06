@@ -39,9 +39,9 @@ class PhotoController extends BaseController
         $picture->serie_id = filter_var($tab['serie_id'],FILTER_SANITIZE_NUMBER_INT);
 
         try {
-            $picture->url = $this->get('assets_path').'/uploads/'.$picture->url;
             $picture->save();
             file_put_contents($this->get('upload_path').'/'.$picture->url, $photo_str);
+            $picture->url = $this->get('assets_path').'/uploads/'.$picture->url;
             return Writer::json_output($response,201,$picture);
 
         } catch (Exception $e) {
