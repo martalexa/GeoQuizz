@@ -20,7 +20,7 @@ class PhotoController extends BaseController
         return( $output_file );
     }
 
-	public function createPhoto($request,$response,$args){
+    public function createPhoto($request,$response,$args){
 
         $tab = $request->getParsedBody();
         $photo_str = $tab['photo'];
@@ -37,13 +37,20 @@ class PhotoController extends BaseController
         $picture->lat = filter_var($tab['lat'],FILTER_SANITIZE_SPECIAL_CHARS);
         $picture->lng = filter_var($tab['lat'],FILTER_SANITIZE_SPECIAL_CHARS);
         $picture->serie_id = filter_var($tab['serie_id'],FILTER_SANITIZE_NUMBER_INT);
-        file_put_contents($this->get('upload_path').'/'.$picture->url, $photo_str);
-                $picture->url = $this->get('assets_path').'/uploads/'.$picture->url;
-        $picture->save();
+
+        try {
+            $picture->url = $this->get('assets_path').'/uploads/'.$picture->url;
+            $picture->save();
+            file_put_contents($this->get('upload_path').'/'.$picture->url, $photo_str);
+            return Writer::json_output($response,201,$picture);
+
+        } catch (Exception $e) {
+            $response = $response->withHeader('Content-Type','application/json')->withStatus(500);
+            $response->getBody()->write(json_encode(['type' => 'error', 'error' => 500, 'message' => $e->getMessage()]));
+        }
 
 
 
-        return Writer::json_output($response,201,$picture);
 
 
     }

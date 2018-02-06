@@ -23,12 +23,12 @@ class PartieController extends BaseController
 	public function getPartie($request,$response,$args) {
 		try {
 
-			$partie = Partie::where("id","=",$args['id'])->firstOrFail();
+			$partie = Partie::select()->where("id","=",$args['id'])->firstOrFail();
 			$result = $partie;
 			$serie = $partie->serie()->first();
 			$result->serie = $serie;
-			$result->serie->city= $serie->city()->select("id","name","lat","lng")->first();
-			$result->serie->photos= $serie->photos()->select("id","description","url","lat","lng")->get();
+			$result->serie->city= $serie->city()->select("zoom_level","name","lat","lng")->first();
+			$result->serie->photos= $serie->photos()->select("description","url","lat","lng")->get();
 
 
 			return Writer::json_output($response,200,$result);
