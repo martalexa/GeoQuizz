@@ -22,7 +22,10 @@ class PartieController extends BaseController
 
 	public function getPartie($request,$response,$args) {
 		try {
+			$result = array();
 			$partie = Partie::where("id","=",$args['id'])->firstOrFail();
+			array_push($result,$partie);
+				
 			return Writer::json_output($response,200,$partie);
 			
 		} catch (ModelNotFoundException $exception){
