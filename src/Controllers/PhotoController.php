@@ -27,7 +27,7 @@ class PhotoController extends BaseController
         $photo_str = base64_decode($photo_str);
 
         $picture = new Photo();
-        $picture->url = Uuid::uuid1();
+        $picture->url = Uuid::uuid1().'.png';
 
         if(isset($tab['description']) && !empty($tab['description'])){
             $picture->description = filter_var($tab['description'],FILTER_SANITIZE_SPECIAL_CHARS);
@@ -36,9 +36,14 @@ class PhotoController extends BaseController
         }
         $picture->lat = filter_var($tab['lat'],FILTER_SANITIZE_SPECIAL_CHARS);
         $picture->lng = filter_var($tab['lat'],FILTER_SANITIZE_SPECIAL_CHARS);
-        $picture->serie_id = filter_var($tab['lat'],FILTER_SANITIZE_NUMBER_INT);
+        $picture->serie_id = filter_var($tab['serie_id'],FILTER_SANITIZE_NUMBER_INT);
+        file_put_contents($this->get('upload_path').'/'.$picture->url, $photo_str);
+                $picture->url = $this->get('assets_path').'/uploads/'.$picture->url;
+        $picture->save();
 
-        file_put_contents(__DIR__.'/../../web/uploads/'.$picture->url.'.png', $photo_str);
+
+
+        return Writer::json_output($response,201,$picture);
 
 
     }

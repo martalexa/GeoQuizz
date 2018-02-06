@@ -18,3 +18,12 @@ $container['PhotoController'] = function ($c) {
 $container['UserController'] = function($c){
 	return new App\Controllers\UserController($c);
 };
+
+//Photo upload path
+
+$container['upload_path'] = __DIR__.'/../../../web/uploads';
+
+
+//web assets domain
+
+$container['assets_path'] = 'http://web.geoquizz.local:10085';
