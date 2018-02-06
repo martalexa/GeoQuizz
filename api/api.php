@@ -10,6 +10,14 @@ try{
 		]
 	]);
 
+	$app->add(function($request, $response, callable $next){
+		$response = $response->withHeader('Content-type', 'application/json; charset=utf-8');
+		$response = $response->withHeader('Access-Control-Allow-Origin', '*');
+		$response = $response->withHeader('Access-Control-Allow-Methods', 'OPTION, GET, POST, PUT, PATCH, DELETE');
+		return $next($request, $response);
+	});
+
+
 	require __DIR__.'/../src/includes/db.php';
 	require __DIR__.'/../src/includes/api/dependencies.php';
 	require __DIR__.'/../src/includes/api/routes.php';
