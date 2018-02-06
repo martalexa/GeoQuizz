@@ -45,7 +45,6 @@ class PhotoController extends BaseController
 
         $test = $this->check_base64_image($photo_str, $response);
         if ($test) {
-
             $photo_str = base64_decode($photo_str);
 
 
@@ -58,13 +57,12 @@ class PhotoController extends BaseController
             $picture->lat = filter_var($tab['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
             $picture->lng = filter_var($tab['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
             $picture->serie_id = filter_var($tab['serie_id'], FILTER_SANITIZE_NUMBER_INT);
-
             file_put_contents($this->get('upload_path') . '/' . $picture->url, $photo_str);
-            $picture->url = $this->get('assets_path') . '/uploads/' . $picture->url;
+            
 
             try {
-
                 $picture->save();
+                $picture->url = $this->get('assets_path') . '/uploads/' . $picture->url;
                 return Writer::json_output($response, 201, $picture);
 
             } catch (\Exception $e) {
