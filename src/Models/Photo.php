@@ -13,11 +13,8 @@ class Photo extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    public function partie(){
-        return $this->belongsTo(Partie::class, 'partie_id');
-    }
-
     public function serie(){
         return $this->belongsTo(Serie::class, 'serie_id');
     }
+
 }

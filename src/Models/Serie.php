@@ -12,6 +12,7 @@ class Serie extends Model
     protected $table = 'serie';
     protected $primaryKey = 'id';
     public $timestamps = false;
+    protected $hidden = ["city_id"];
 
     public function parties(){
         return $this->hasMany(Partie::class, 'serie_id');
@@ -23,5 +24,8 @@ class Serie extends Model
 
     public function city(){
         return $this->belongsTo(City::class, 'city_id');
+    }
+    public function palier(){
+        return $this->hasMany(Palier::class,'serie_id');
     }
 }

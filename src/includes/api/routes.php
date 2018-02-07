@@ -9,7 +9,7 @@
     $app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 	$app->get('/serie/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
 
-// Routes Photos
+// Routes City
 
 
 // Routes User
@@ -28,4 +28,6 @@
 
         $this->patch('/series/{id: [0-9]+}/paliers[/]', 'PalierController:createPalier');
 
+        $this->get('/cities[/]','CityController:getCities')->setName('get_cities');
+      
     })->add(new \App\Middleware\CheckJwt($container));
