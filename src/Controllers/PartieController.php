@@ -58,7 +58,7 @@ class PartieController extends BaseController
 		} catch (ModelNotFoundException $exception){
 
 			$notFoundHandler = $this->container->get('notFoundHandler');
-			return $notFoundHandler($req,$resp);
+			return $notFoundHandler($request,$response);
 		}
 
 	}
