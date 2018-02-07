@@ -75,4 +75,24 @@ class SerieController extends BaseController
 
 
         }
+
+        /*
+        * Removes a game
+        */
+        public function getSerie($request,$response,$args) {
+
+			try {
+
+				$serie = Serie::findOrFail($args['id']);
+
+				$serie->delete();
+
+				return Writer::json_output($response, 204);
+
+			} catch (ModelNotFoundException $e) {
+				$notFoundHandler = $this->container->get('notFoundHandler');
+				return $notFoundHandler($request,$response);
+			}
+		
+		}
     }
