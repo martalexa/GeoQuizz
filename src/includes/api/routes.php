@@ -18,6 +18,6 @@
 
     $app->group('/admin', function () {
         $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
-        $this->post('/series/{id: d+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
-        $this->patch('/series/{id: d+}/paliers[/]', 'PalierController:createPalier');
+        $this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
+        $this->patch('/series/{id: [0-9]+}/paliers[/]', 'PalierController:createPalier');
     })->add(new \App\Middleware\CheckJwt($container));

@@ -26,7 +26,7 @@ class PalierController extends BaseController{
 
             foreach ($paliers as $palier){
                 $p = new Palier();
-                $p->serie = $serie;
+                $p->serie_id = $serie->id;
                 $p->coef = $palier['coef'];
                 $p->points = $palier['points'];
                 array_push($collection, $p);

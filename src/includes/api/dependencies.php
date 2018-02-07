@@ -19,6 +19,9 @@ $container['UserController'] = function($c){
 	return new App\Controllers\UserController($c);
 };
 
+$container['PalierController'] = function($c){
+    return new App\Controllers\PalierController($c);
+};
 
 //Photo upload path
 
