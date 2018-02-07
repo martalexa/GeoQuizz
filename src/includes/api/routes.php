@@ -7,7 +7,9 @@
 	$app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
 	$app->post('/serie[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
+	$app->get('/serie/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
 
+// Routes Photos
     $app->post('/photo[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng','serie_id']);
 
 	$app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');

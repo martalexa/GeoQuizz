@@ -13,11 +13,6 @@ use Symfony\Component\Translation\Dumper\PoFileDumper;
 
 class PhotoController extends BaseController
 {
-/*
-   public function customError($errno, $errstr) {
-      echo "<b>Error:</b> [$errno] $errstr<br>";
-      exit(403);
-  } */
 
   public function base64_to_jpeg($base64_string, $output_file)
   {
@@ -31,11 +26,11 @@ public function check_base64_image($base64, $response)
 {
         //todo : desactiver les warnings
     error_reporting(0);
-  if (imagecreatefromstring(base64_decode($base64))) {
-    return true;
-} else {
-    return false;
-}
+    if (imagecreatefromstring(base64_decode($base64))) {
+        return true;
+    } else {
+        return false;
+    }
 
 }
 
