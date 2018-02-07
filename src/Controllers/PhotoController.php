@@ -53,10 +53,20 @@ public function createPhoto($request, $response, $args)
         $picture->lng = filter_var($tab['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
         $picture->serie_id = filter_var($tab['serie_id'], FILTER_SANITIZE_NUMBER_INT);
 
-        file_put_contents($this->get('upload_path') . '/' . $picture->url, $photo_str);
 
+
+            if (isset($tab['description']) && !empty($tab['description'])) {
+                $picture->description = filter_var($tab['description'], FILTER_SANITIZE_SPECIAL_CHARS);
+            } else {
+                $picture->description = 'Aucune description ';
+            }
+
+            $picture->lat = filter_var($tab['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $picture->lng = filter_var($tab['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $picture->serie_id = filter_var($tab['serie_id'], FILTER_SANITIZE_NUMBER_INT);
 
         try {
+            file_put_contents($this->get('upload_path') . '/' . $picture->url, $photo_str);
             $picture->save();
             $picture->url = $this->get('assets_path') . '/uploads/' . $picture->url;
             return Writer::json_output($response, 201, $picture);
@@ -68,7 +78,7 @@ public function createPhoto($request, $response, $args)
         }
 
     } else {
-        return Writer::json_output($response,403,['error' => "Forbidden "]);
+        return Writer::json_output($response,400,['error' => "Bad Request"]);
     }
 
 }

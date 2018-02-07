@@ -49,8 +49,10 @@ class SerieController extends BaseController
             $tab = $request->getParsedBody();
             $serie = new Serie();
 
+
             $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
             $serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
+
 
             try{
             	$serie->save();
