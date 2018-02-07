@@ -17,7 +17,15 @@
     $app->post('/admin/signin[/]', 'UserController:connectUser');
 
     $app->group('/admin', function () {
+
+        $this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
+
+        $this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
+
         $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
+
         $this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
+
         $this->patch('/series/{id: [0-9]+}/paliers[/]', 'PalierController:createPalier');
+
     })->add(new \App\Middleware\CheckJwt($container));
