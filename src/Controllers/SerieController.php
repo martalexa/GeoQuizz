@@ -21,8 +21,8 @@ class SerieController extends BaseController
 		$series = Serie::select()->get();
 		foreach ($series as $serie) {
 
-	$result_temp =  $serie;
-	$result_temp->city_name = $serie->city()->select("name")->first()->name;
+			$result_temp =  $serie;
+			$result_temp->city_name = $serie->city()->select("name")->first()->name;
 			array_push($result,$result_temp);
 
 		}
@@ -33,7 +33,7 @@ class SerieController extends BaseController
 		try {
 			$serie = Serie::where("id","=",$args["id"])->firstOrFail();
 
-			 return Writer::json_output($response,201,$serie);
+			return Writer::json_output($response,201,$serie);
 		} catch (ModelNotFoundException $e) {
 			$notFoundHandler = $this->container->get('notFoundHandler');
 			return $notFoundHandler($request,$response);
@@ -46,20 +46,34 @@ class SerieController extends BaseController
 	    /* La création d'une série consiste à définir la ville
             concernée et la carte associée à cette série
 	    */
-        $tab = $request->getParsedBody();
-        $serie = new Serie();
+            $tab = $request->getParsedBody();
+            $serie = new Serie();
 
-        $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
-        $serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
-        // todo : recuperer d'autre donnée -> temps et coef multiplicateur
 
-        try{
-            $serie->save();
-            return Writer::json_output($response,201,$serie);
+            $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
+            $serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
 
-        } catch (\Exception $e){
+
+            try{
+            	$serie->save();
+            	return Writer::json_output($response,201,$serie);
+
+            } catch (\Exception $e){
             // revoyer erreur format json
-           return Writer::json_output($response,500,['error' => 'Internal Server Error']);
+            	return Writer::json_output($response,500,['error' => 'Internal Server Error']);
+            }
+        }
+
+    // TODO GET LE NOMBRE DE PHOTOS TOTAL
+        public function getNumberPhotos(Request $request,Response $response,$args) {
+        	try {
+        		$serie=Serie::where("id","=",$args["id"])->firstOrFail();
+        		$count=$serie->photos()->count();
+        		return Writer::json_output($response,201,$count);
+        	} catch (Exception $e) {
+        		return Writer::json_output($response,500,['error' => 'Internal Server Error']);
+        	}
+
+
         }
     }
-}

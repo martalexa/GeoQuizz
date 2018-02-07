@@ -7,6 +7,10 @@
 	$app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
     $app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
+	$app->get('/serie/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
+
+// Routes Photos
+
 
 // Routes User
 	$app->post('/admin/signup[/]', 'UserController:createUser')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['username','password']);

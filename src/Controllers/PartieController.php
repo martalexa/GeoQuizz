@@ -80,12 +80,22 @@ class PartieController extends BaseController
 
 		try{
 			$partie->save();
-			return Writer::json_output($response,200,$partie);
+			$result = $partie;
+			$serie = $partie->serie()->first();
+			$result->serie = $serie;
+			$result->serie->city= $serie->city()->select("zoom_level","name","lat","lng")->first();
+			$photos = $serie->photos()->select("description","url","lat","lng")->get();
+			foreach($photos as $key => $photo){
+				$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
+				$photos[$key] = $photo;
+			}
+			$result->serie->photos = $photos;
+			return Writer::json_output($response,200,$result);
 
 
 		} catch (\Exception $e){
 			$response = $response->withHeader('Content-Type','application/json')->withStatus(500);
-			$response->getBody()->write(json_encode(['type' => 'error', 'error' => 500, 'message' => $e->getMessage()]));
+			return $response->getBody()->write(json_encode(['type' => 'error', 'error' => 500, 'message' => $e->getMessage()]));
 
 		}
 	}
@@ -110,7 +120,7 @@ class PartieController extends BaseController
 			return Writer::json_output($response,200,$partie);
 		} catch (Exception $e) {
 			$response = $response->withHeader('Content-Type','application/json')->withStatus(500);
-			$response->getBody()->write(json_encode(['type' => 'error', 'error' => 500, 'message' => $e->getMessage()]));
+			return $response->getBody()->write(json_encode(['type' => 'error', 'error' => 500, 'message' => $e->getMessage()]));
 		}
 		
 	}
