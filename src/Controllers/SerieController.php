@@ -20,9 +20,9 @@ class SerieController extends BaseController
 		$result = array();
 		$series = Serie::select()->get();
 		foreach ($series as $serie) {
-
+			
 			$result_temp =  $serie;
-			$result_temp->city_name = $serie->city()->select("name")->first()->name;
+			$result_temp->city = $serie->city()->select()->first();
 			array_push($result,$result_temp);
 
 		}
@@ -63,8 +63,7 @@ class SerieController extends BaseController
             	return Writer::json_output($response,500,['error' => 'Internal Server Error']);
             }
         }
-
-    // TODO GET LE NOMBRE DE PHOTOS TOTAL
+        
         public function getNumberPhotos(Request $request,Response $response,$args) {
         	try {
         		$serie=Serie::where("id","=",$args["id"])->firstOrFail();
