@@ -53,6 +53,8 @@ class PhotoController extends BaseController
 
             if (isset($tab['description']) && !empty($tab['description'])) {
                 $picture->description = filter_var($tab['description'], FILTER_SANITIZE_SPECIAL_CHARS);
+            } else {
+                $picture->description = 'Aucune description ';
             }
             $picture->lat = filter_var($tab['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
             $picture->lng = filter_var($tab['lng'], FILTER_SANITIZE_SPECIAL_CHARS);

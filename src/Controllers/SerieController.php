@@ -51,6 +51,7 @@ class SerieController extends BaseController
 
         $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
         $serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
+        // todo : recuperer d'autre donnée -> temps et coef multiplicateur
 
         try{
             $serie->save();

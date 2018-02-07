@@ -12,15 +12,31 @@ use App\Controllers\Writer;
 use App\Models\Partie;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+/**
+ * Class PartieController
+ * @package App\Controllers
+ */
 class PartieController extends BaseController
 {
 
-	public function getParties($request, $response, $args){
+    /**
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return \Psr\Http\Message\ResponseInterface|static
+     */
+    public function getParties($request, $response, $args){
 		$parties = Partie::select()->get();
 		return Writer::json_output($response,200,$parties);
 	}
 
-	public function getPartie($request,$response,$args) {
+    /**
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return \Psr\Http\Message\ResponseInterface|static
+     */
+    public function getPartie($request, $response, $args) {
 		try {
 
 			$partie = Partie::select()->where("id","=",$args['id'])->firstOrFail();
@@ -47,7 +63,12 @@ class PartieController extends BaseController
 
 	}
 
-	public function createPartie($request,$response) {
+    /**
+     * @param $request
+     * @param $response
+     * @return \Psr\Http\Message\ResponseInterface|static
+     */
+    public function createPartie($request, $response) {
 		$tab = $request->getParsedBody();
 		$partie = new Partie();
 		$partie->player_username = filter_var($tab["player_username"],FILTER_SANITIZE_STRING);
@@ -68,13 +89,20 @@ class PartieController extends BaseController
 
 		}
 	}
-	public function updateScore($request,$response,$args) {
+
+    /**
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return \Psr\Http\Message\ResponseInterface|static
+     */
+    public function updateScore($request, $response, $args) {
 		$tab = $request->getParsedBody();
 		try {
 			$partie = Partie::where("id","=",$args["id"])->firstOrFail();
 		} catch (ModelNotFoundException $e) {
 			$notFoundHandler = $this->container->get('notFoundHandler');
-			return $notFoundHandler($req,$resp);
+			return $notFoundHandler($request,$response);
 		}
 		try {
 			$partie->score =filter_var($tab["score"],FILTER_SANITIZE_NUMBER_FLOAT);
@@ -86,4 +114,13 @@ class PartieController extends BaseController
 		}
 		
 	}
+
+	//todo: changement de la partie : 0 - 1 - 2
+
+    /**
+     *
+     */
+    public function changeStatePartie(){
+
+    }
 }
