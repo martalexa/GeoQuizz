@@ -3,7 +3,9 @@
     "description": "api ateler GeoQuizz",
     "require": {
         "illuminate/database": "^5.5",
-        "slim/slim": "^3.9"
+        "slim/slim": "^3.9",
+        "ramsey/uuid": "^3.7",
+        "firebase/php-jwt": "^5.0.0"
     },
     "authors": [
         {

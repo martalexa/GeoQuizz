@@ -5,6 +5,7 @@
  * Date: 05/02/18
  * Time: 11:44
  */
+namespace App\Models;
 use \Illuminate\Database\Eloquent\Model;
 class Serie extends Model
 {

@@ -31,11 +31,33 @@ services:
     volumes :
         - ./api:/var/www/api
         - ./src:/var/www/src
+        - ./web:/var/www/web
         - ./vendor:/var/www/vendor
     networks:
         - geoquizz_network
     links :
         - mysql:geoquizz
+
+
+####################
+##### Web assets & images
+####################
+
+  web.public:
+    image: canals/php
+    container_name: web.geoquizz.local
+    environment:
+        - VHOST_HOSTNAME=web.geoquizz.local
+        - VHOST_DOCROOT=/var/www/web
+#       - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+#       - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+    ports:
+        - "10085:80"
+        - "10446:443"
+    volumes :
+        - ./web:/var/www/web
+    networks:
+        - geoquizz_network
 
 ######################
 ############ Migration Service

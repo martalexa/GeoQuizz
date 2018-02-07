@@ -36,6 +36,7 @@ class Migrator {
 
                 $table->integer('id', true);
                 $table->string('distance')->default('');
+                $table->string('image')->default('');
                 $table->timestamp('updated_at')->default(Capsule::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
                 $table->timestamp('created_at')->default(Capsule::raw('CURRENT_TIMESTAMP'));
                 //FK
@@ -84,6 +85,46 @@ class Migrator {
                 $table->integer('state');
                 $table->string('player_username');
                 $table->integer('score');
+                $table->integer('serie_id');
+
+                $table->engine = 'InnoDB';
+
+                //Foreign keys declaration
+                $table->foreign('serie_id')->references('id')->on('serie')->onDelete('cascade');
+            });
+        }
+
+        /**
+         * create table palier
+         */
+        if (!Capsule::schema()->hasTable('palier')) {
+            Capsule::schema()->create('palier', function($table)
+            {
+                $table->integer('id', true);
+                $table->integer('coef');
+                $table->integer('points');
+
+                //FK
+                $table->integer('serie_id');
+
+                $table->engine = 'InnoDB';
+
+                //Foreign keys declaration
+                $table->foreign('serie_id')->references('id')->on('serie')->onDelete('cascade');
+            });
+        }
+
+        /**
+         * create table temps
+         */
+        if (!Capsule::schema()->hasTable('temps')) {
+            Capsule::schema()->create('temps', function($table)
+            {
+                $table->integer('id', true);
+                $table->integer('nb_seconds');
+                $table->integer('coef');
+
+                //FK
                 $table->integer('serie_id');
 
                 $table->engine = 'InnoDB';

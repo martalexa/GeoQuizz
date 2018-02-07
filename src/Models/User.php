@@ -6,7 +6,6 @@
  *
  * @author: canals
  */
-
 namespace App\Models;
 use \Illuminate\Database\Eloquent\Model;
 
@@ -15,17 +14,9 @@ use \Illuminate\Database\Eloquent\Model;
  * Class Categorie
  * @package Api\models
  */
-class Partie extends Model {
+class User extends Model {
 
-    protected $table = 'partie';
+    protected $table = 'user';
     protected $primaryKey = 'id';
     public $timestamps = false;
-
-    public function serie(){
-        return $this->belongsTo(Serie::class, 'serie_id');
-    }
-
-    public function photos(){
-        return $this->hasMany(Photo::class, 'partie_id');
-    }
 }
