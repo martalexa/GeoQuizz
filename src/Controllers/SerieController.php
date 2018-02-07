@@ -63,8 +63,7 @@ class SerieController extends BaseController
             	return Writer::json_output($response,500,['error' => 'Internal Server Error']);
             }
         }
-
-    // TODO GET LE NOMBRE DE PHOTOS TOTAL
+        
         public function getNumberPhotos(Request $request,Response $response,$args) {
         	try {
         		$serie=Serie::where("id","=",$args["id"])->firstOrFail();
