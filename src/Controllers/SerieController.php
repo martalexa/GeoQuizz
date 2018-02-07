@@ -79,7 +79,7 @@ class SerieController extends BaseController
         /*
         * Removes a game
         */
-        public function getSerie($request,$response,$args) {
+        public function deleteSerie($request, $response, $args) {
 
 			try {
 
