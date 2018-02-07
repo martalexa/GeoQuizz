@@ -14,6 +14,9 @@ $container['SerieController'] = function($c){
 $container['PhotoController'] = function ($c) {
     return new App\Controllers\PhotoController($c);
 };
+$container['CityController'] = function ($c) {
+    return new App\Controllers\CityController($c);
+};
 
 $container['UserController'] = function($c){
 	return new App\Controllers\UserController($c);

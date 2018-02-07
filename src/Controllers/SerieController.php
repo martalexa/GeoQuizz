@@ -22,9 +22,9 @@ class SerieController extends BaseController
 		$result = array();
 		$series = Serie::select()->get();
 		foreach ($series as $serie) {
-
+			
 			$result_temp =  $serie;
-			$result_temp->city_name = $serie->city()->select("name")->first()->name;
+			$result_temp->city = $serie->city()->select()->first();
 			array_push($result,$result_temp);
 
 		}
@@ -76,8 +76,7 @@ class SerieController extends BaseController
             	return Writer::json_output($response,500,['error' => 'Internal Server Error']);
             }
         }
-
-    // TODO GET LE NOMBRE DE PHOTOS TOTAL
+        
         public function getNumberPhotos(Request $request,Response $response,$args) {
         	try {
         		$serie=Serie::where("id","=",$args["id"])->firstOrFail();
@@ -89,4 +88,24 @@ class SerieController extends BaseController
 
 
         }
+
+        /*
+        * Removes a game
+        */
+        public function deleteSerie($request, $response, $args) {
+
+			try {
+
+				$serie = Serie::findOrFail($args['id']);
+
+				$serie->delete();
+
+				return Writer::json_output($response, 204);
+
+			} catch (ModelNotFoundException $e) {
+				$notFoundHandler = $this->container->get('notFoundHandler');
+				return $notFoundHandler($request,$response);
+			}
+		
+		}
     }
