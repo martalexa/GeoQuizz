@@ -17,6 +17,13 @@ class PalierController extends BaseController {
 
     public function createPalier($req, $res, $args){
 
+
+
+        /*
+         * VOIR DANS LE CAS OU LA SERIE À DÉJA UN PALIER AFFECTER
+         *
+         * */
+
         try{
             // verifie l'intégrité de l'id
             $serie = Serie::findOrFail($args['id']);
@@ -37,30 +44,36 @@ class PalierController extends BaseController {
                             // si le palier courant est inferieur au palier suivant
                             if($palier['coef'] < $paliers[$i]['coef']){
                                 //les points du palier suivant doivent etre plus petit
-                                if($palier['points'] < $paliers[$i]['points']) {
+                                if($palier['points'] <= $paliers[$i]['points']) {
                                     return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials']);
                                 }
                             } else {
-                               return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials']);
+                               return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials1']);
                             }
                         }
                         $i++;
                         // Si une des valeurs est en dessous de 0
                         if($palier['coef'] < 0 || $palier['points'] < 0){
-                            return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials']);
+                            return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials2']);
                         }
                     } else {
-                       return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials']);
+                       return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials3']);
                     }
                 }
 
                 $collection = array();
                 foreach ($paliers as $palier){
-                    $p = new Palier();
-                    $p->serie_id = $serie->id;
-                    $p->coef = $palier['coef'];
-                    $p->points = $palier['points'];
-                    array_push($collection, $p);
+
+                    $testCoef = Palier::where('coef','=',$palier['coef'])->first();
+                    if(!$testCoef){
+                        $p = new Palier();
+                        $p->serie_id = $serie->id;
+                        // un coef est unique
+                        $p->coef = $palier['coef'];
+
+                        $p->points = $palier['points'];
+                        array_push($collection, $p);
+                    }
                 }
 
                 foreach($collection as $palier){

@@ -9,6 +9,7 @@ namespace App\Middleware;
 use App\Controllers\Writer;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use App\Models\Serie;
 class CheckFormulaire {
     public  function checkFormulaire (Request $req, Response $resp, $next)
     {
@@ -34,4 +35,5 @@ class CheckFormulaire {
             return Writer::json_output($resp,403,['Requête' => "Incomplète ou erronée"]);
         }
     }
+
 }

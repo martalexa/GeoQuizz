@@ -8,7 +8,9 @@ namespace App\Controllers;
 /**
 * 
 */
+use App\Models\Palier;
 use App\Models\Serie;
+use App\Models\Time;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Controllers\Writer;
 use Slim\Http\Request;
@@ -56,6 +58,17 @@ class SerieController extends BaseController
 
             try{
             	$serie->save();
+
+            	// faire les valeurs par défault
+                $palier = new Palier();
+                $time = new Time();
+                // configureer les objet et faire un associate
+                // il faudra ensuite corriger le patch pour ne pas créer un nouvel objet
+                // lorsque le coef est déjà éxistant
+
+
+
+
             	return Writer::json_output($response,201,$serie);
 
             } catch (\Exception $e){
