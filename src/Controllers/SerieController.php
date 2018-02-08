@@ -38,13 +38,27 @@ class SerieController extends BaseController
 			$result = $serie;
 			$result->city = $serie->city()->select()->first();
 			$photos = $serie->photos()->select("id","description","url","lat","lng")->get();
+			    		$paliers = $serie->paliers()->get() ;
+			    		    		$times = $serie->times()->get() ;
     		foreach($photos as $key => $photo){
     			$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
     			$photos[$key] = $photo;
     		}
+
+    		foreach($paliers as $key => $palier){
+    			$palier->url = $this->get('assets_path').'/uploads/' . $palier->url;
+    			$paliers[$key] = $palier;
+    		}
+    				foreach($times as $key => $time){
+    			$time->url = $this->get('assets_path').'/uploads/' . $time->url;
+    			$times[$key] = $time;
+    		}
+    		$result->paliers = $paliers;
+    		$result->times = $times;
     		$result->photos = $photos;
 
-			return Writer::json_output($response,201,$result);
+
+			return Writer::json_output($response,200,$result);
 		} catch (ModelNotFoundException $e) {
 			$notFoundHandler = $this->container->get('notFoundHandler');
 			return $notFoundHandler($request,$response);

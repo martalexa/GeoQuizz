@@ -25,7 +25,10 @@ class Serie extends Model
     public function city(){
         return $this->belongsTo(City::class, 'city_id');
     }
-    public function palier(){
+    public function paliers(){
         return $this->hasMany(Palier::class,'serie_id');
+    }
+       public function times(){
+        return $this->hasMany(Time::class,'serie_id');
     }
 }
