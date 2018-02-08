@@ -42,8 +42,3 @@ $app->group('/admin', function () {
 	$this->get('/cities[/]','CityController:getCities')->setName('get_cities');
 
 })->add(new \App\Middleware\CheckJwt($container));
-<<<<<<< HEAD
-=======
-
-
->>>>>>> cd1a949cb7cf5ff18e97d001b0821f8de2a75e86
