@@ -85,9 +85,12 @@ class SerieController extends BaseController
             	$serie->city_id = filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT);
             	$serie->save();
             	$serie->city = $city;
+
             	if(isset($tab['image']) && !empty($tab['image'])) {
             		$serie->image = $this->get('assets_path') . '/uploads/' . $serie->image;
             	}
+
+
             	$result = $serie;
             	// faire les valeurs par défault
                 // 3 palier par default
@@ -112,6 +115,7 @@ class SerieController extends BaseController
             		array_push($tableaux,$tableauxFor);
             	}
             	array_push($paliers,['paliers' => $tableaux]);
+
             	$tableau2 = [];
                 // 3 temps par defaults
             	for ($i = 4 ; $i >= 1;$i = $i / 2) {
@@ -184,6 +188,7 @@ class SerieController extends BaseController
         				return Writer::json_output($response,400,['error' => "Bad Request"]);
         			}
         		}
+
         		$serie->save();
         		return Writer::json_output($response,200, $serie);
         	} catch (ModelNotFoundException $e) {
