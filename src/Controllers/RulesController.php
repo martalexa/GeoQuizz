@@ -15,9 +15,11 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Models\Palier;
 use App\Models\Time;
+use App\Models\City;
 class RulesController extends BaseController
 {
 
+    // TODO : CORRIGER LES WRITERS POUR RENVOYE TJR LE MM MESSAGES
     public function modifyRules( Request $request,Response $response, $args){
 
 
@@ -31,12 +33,19 @@ class RulesController extends BaseController
         sort($paliers);
 
         //CONTROLE
-        $this->controleRules($times,"nb_seconds",$response);
-        $this->controleRules($paliers,"points",$response);
+        if(!$this->controleRules($times,"nb_seconds",$response)){
+            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
+        }
+        if(!$this->controleRules($paliers,"points",$response)){
+            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 2']);
+        }
 
 
         try{
-            $serie = Serie::where('id','=',$idSerie)->firstOrFail();
+            $serie = Serie::findOrFail($idSerie);
+
+           // var_dump($serie->city());
+            //exit();
             // Supression des paliers de la base
             $tableauxBase = Palier::where('serie_id','=',$idSerie)->get();
             foreach ($tableauxBase as $palier){
@@ -50,7 +59,7 @@ class RulesController extends BaseController
             }
 
             // TABLEAU A RENVOYER
-            $collection = array();
+            $collectionPalier = array();
             foreach ($paliers as $palier){
                     $p = new Palier();
                     $p->serie_id = $serie->id;
@@ -58,26 +67,31 @@ class RulesController extends BaseController
                     $p->coef = $palier['coef'];
 
                     $p->points = $palier['points'];
-                    array_push($collection, $p);
+
+                $p->save();
+                unset($p->serie_id);
+                array_push($collectionPalier, $p);
             }
 
-            foreach($collection as $palier){
-                $palier->save();
-            }
 
+            $collectionTime = array();
             foreach ($times as $time){
                 $t = new Time();
                 $t->serie_id = $serie->id;
                 // un coef est unique
                 $t->coef = $time['coef'];
-
                 $t->nb_seconds = $time['nb_seconds'];
-                array_push($collection, $p);
+
+                $t->save();
+
+                unset($t->serie_id);
+                array_push($collectionTime, $t);
             }
 
-            foreach($collection as $palier){
-                $palier->save();
-            }
+            $serie->city= City::find($serie->city_id);
+            $collection = $serie;
+            $collection->paliers = $collectionPalier;
+            $collection->times = $collectionTime;
 
             Writer::json_output($response, 201, $collection);
 
@@ -98,8 +112,10 @@ class RulesController extends BaseController
 
                             //les$valuede seconde suivant doivent etre plus grand
                             if($tab[$value] <= $tableaux[$i][$value]) {
-                                return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
+                                return false;
                             }
+                    } else {
+                        return true;
                     }
                 } else {
                     return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials 3']);
