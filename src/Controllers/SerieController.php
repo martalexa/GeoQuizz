@@ -197,6 +197,7 @@ class SerieController extends BaseController
         		$serie = Serie::findOrFail($args['id']);
         		$tab = $request->getParsedBody();
         		$serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
+                $serie->name = filter_var($tab["name"],FILTER_SANITIZE_STRING);
         		$serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
         		if(isset($tab['image']) && !empty($tab['image'])){
         			$photo_str = $tab['image'];
