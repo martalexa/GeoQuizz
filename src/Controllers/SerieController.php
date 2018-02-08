@@ -78,78 +78,78 @@ class SerieController extends BaseController
             $serie->name = filter_var($tab["name"],FILTER_SANITIZE_STRING)
             $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
             if(isset($tab['image']) && !empty($tab['image'])){
-                $photo_str = $tab['image'];
-                $testPhoto = new PhotoController($this->container);
-                $test = $testPhoto->check_base64_image($photo_str,$response);
-                if ($test) {
-                    $serie->image = Uuid::uuid1() . '.png';
-                    $photo_str = base64_decode($photo_str);
-                    file_put_contents($this->get('upload_path') . '/' . $serie->image, $photo_str);
-                } else {
-                    return Writer::json_output($response,400,['error' => "Bad Request"]);
-                }
+            	$photo_str = $tab['image'];
+            	$testPhoto = new PhotoController($this->container);
+            	$test = $testPhoto->check_base64_image($photo_str,$response);
+            	if ($test) {
+            		$serie->image = Uuid::uuid1() . '.png';
+            		$photo_str = base64_decode($photo_str);
+            		file_put_contents($this->get('upload_path') . '/' . $serie->image, $photo_str);
+            	} else {
+            		return Writer::json_output($response,400,['error' => "Bad Request"]);
+            	}
             }
 
             $paliers = array();
             try{
-                $city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
-                $serie->city_id = filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT);
-                $serie->save();
-                $serie->city = $city;
+            	$city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
+            	$serie->city_id = filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT);
+            	$serie->save();
+            	$serie->city = $city;
 
-                if(isset($tab['image']) && !empty($tab['image'])) {
-                    $serie->image = $this->get('assets_path') . '/uploads/' . $serie->image;
-                }
+            	if(isset($tab['image']) && !empty($tab['image'])) {
+            		$serie->image = $this->get('assets_path') . '/uploads/' . $serie->image;
+            	}
 
-                $result = $serie;
+            	$result = $serie;
             	// faire les valeurs par défault
                 // 3 palier par default
-                $tableaux = [];
-                for ($i=1; $i<4; $i++) {
-                    $palier = new Palier();
-                    $palier->coef = $i;
-                    switch ($i) {
-                        case 1:
-                            $palier->points = 5;
-                            break;
-                        case 2:
-                            $palier->points = 3;
-                            break;
-                        case 3:
-                            $palier->points = 1;
-                            break;
-                    }
-                    $palier->serie()->associate($serie);
-                    $palier->save();
-                    $tableauxFor = array('id' => $palier->id, 'coef' => $palier->coef, 'points' => $palier->points);
-                    array_push($tableaux,$tableauxFor);
-                }
+            	$tableaux = [];
+            	for ($i=1; $i<4; $i++) {
+            		$palier = new Palier();
+            		$palier->coef = $i;
+            		switch ($i) {
+            			case 1:
+            			$palier->points = 5;
+            			break;
+            			case 2:
+            			$palier->points = 3;
+            			break;
+            			case 3:
+            			$palier->points = 1;
+            			break;
+            		}
+            		$palier->serie()->associate($serie);
+            		$palier->save();
+            		$tableauxFor = array('id' => $palier->id, 'coef' => $palier->coef, 'points' => $palier->points);
+            		array_push($tableaux,$tableauxFor);
+            	}
 
-                array_push($paliers,['paliers' => $tableaux]);
+            	array_push($paliers,['paliers' => $tableaux]);
 
-                $tableau2 = [];
+            	$tableau2 = [];
                 // 3 temps par defaults
-                for ($i = 4 ; $i >= 1;$i = $i / 2) {
-                    $time = new Time();
-                    $time->coef = $i;
-                    switch ($i) {
-                        case 4:
-                            $time->nb_seconds = 5;
-                            break;
-                        case 2:
-                            $time->nb_seconds = 10;
-                            break;
-                        case 1:
-                            $time->nb_seconds = 20;
-                            break;
-                    }
-                    $time->serie()->associate($serie);
-                    $time->save();
-                    $tableauxFor2 = array('id' => $time->id, 'coef' => $time->coef, 'seconds' => $time->nb_seconds);
-                    array_push($tableau2,$tableauxFor2);
-                }
-                array_push($paliers,["Times" => $tableau2]);
-                $result->rules = $paliers;
+            	for ($i = 4 ; $i >= 1;$i = $i / 2) {
+            		$time = new Time();
+            		$time->coef = $i;
+            		switch ($i) {
+            			case 4:
+            			$time->nb_seconds = 5;
+            			break;
+            			case 2:
+            			$time->nb_seconds = 10;
+            			break;
+            			case 1:
+            			$time->nb_seconds = 20;
+            			break;
+            		}
+            		$time->serie()->associate($serie);
+            		$time->save();
+            		$tableauxFor2 = array('id' => $time->id, 'coef' => $time->coef, 'seconds' => $time->nb_seconds);
+            		array_push($tableau2,$tableauxFor2);
+            	}
+            	array_push($paliers,["Times" => $tableau2]);
+            	$result->rules = $paliers;
             	return Writer::json_output($response,201,["serie" => $result]);
 
             } catch (ModelNotFoundException $ex){
@@ -198,7 +198,19 @@ class SerieController extends BaseController
         		$tab = $request->getParsedBody();
         		$serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
         		$serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
-        		$serie->image = filter_var($tab["image"],FILTER_SANITIZE_STRING);
+        		if(isset($tab['image']) && !empty($tab['image'])){
+        			$photo_str = $tab['image'];
+        			$testPhoto = new PhotoController($this->container);
+        			$test = $testPhoto->check_base64_image($photo_str,$response);
+        			if ($test) {
+        				$serie->image = Uuid::uuid1() . '.png';
+        				$photo_str = base64_decode($photo_str);
+        				file_put_contents($this->get('upload_path') . '/' . $serie->image, $photo_str);
+        			} else {
+        				return Writer::json_output($response,400,['error' => "Bad Request"]);
+        			}
+        		}
+
         		$serie->save();
 
         		return Writer::json_output($response,200, $serie);
