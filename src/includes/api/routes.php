@@ -7,8 +7,9 @@ $app->post('/parties[/]','PartieController:createPartie')->setName('post_partie'
 $app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
 $app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
-$app->get('/serie/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
+$app->get('/series/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
 
+	$app->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
 // Routes City
 
 
@@ -18,19 +19,23 @@ $app->post('/admin/signin[/]', 'UserController:connectUser');
 
 $app->group('/admin', function () {
 
-    $this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
+	$this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 
-    $this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
+	$this->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
 
-    $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
+	$this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
 
-    $this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
+	$this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
 
-    $this->patch('/series/{id: [0-9]+}/paliers[/]', 'PalierController:createPalier');
+	$this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
 
+	$this->patch('/series/{id: [0-9]+}/paliers[/]', 'PalierController:createPalier');
 
-    $this->patch('/series/{id: [0-9]+}/edit[/]', 'SerieController:editSerie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['image','city_id','distance']);
+	$this->patch('/series/{id: [0-9]+}/edit[/]', 'SerieController:editSerie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['image','city_id','distance']);
 
-    $this->get('/cities[/]','CityController:getCities')->setName('get_cities');
-    
+	$this->patch('/series/{id: [0-9]+}/times[/]', 'TimeController:createTime');
+
+	$this->get('/cities[/]','CityController:getCities')->setName('get_cities');
+
 })->add(new \App\Middleware\CheckJwt($container));
+

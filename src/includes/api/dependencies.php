@@ -26,6 +26,9 @@ $container['PalierController'] = function($c){
     return new App\Controllers\PalierController($c);
 };
 
+$container['TimeController'] = function($c){
+    return new \App\Controllers\TimeController($c);
+};
 //Photo upload path
 
 $container['upload_path'] = __DIR__.'/../../../web/uploads';

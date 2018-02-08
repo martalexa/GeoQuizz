@@ -8,7 +8,10 @@ namespace App\Controllers;
 /**
 * 
 */
+use App\Models\Palier;
 use App\Models\Serie;
+use App\Models\Time;
+use App\Models\Photo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Controllers\Writer;
 use Slim\Http\Request;
@@ -32,8 +35,16 @@ class SerieController extends BaseController
 	public function getSerie($request,$response,$args) {
 		try {
 			$serie = Serie::where("id","=",$args["id"])->firstOrFail();
+			$result = $serie;
+			$result->city = $serie->city()->select()->first();
+			$photos = $serie->photos()->select("id","description","url","lat","lng")->get();
+    		foreach($photos as $key => $photo){
+    			$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
+    			$photos[$key] = $photo;
+    		}
+    		$result->photos = $photos;
 
-			return Writer::json_output($response,201,$serie);
+			return Writer::json_output($response,201,$result);
 		} catch (ModelNotFoundException $e) {
 			$notFoundHandler = $this->container->get('notFoundHandler');
 			return $notFoundHandler($request,$response);
@@ -56,6 +67,17 @@ class SerieController extends BaseController
 
             try{
             	$serie->save();
+
+            	// faire les valeurs par défault
+                $palier = new Palier();
+                $time = new Time();
+                // configureer les objet et faire un associate
+                // il faudra ensuite corriger le patch pour ne pas créer un nouvel objet
+                // lorsque le coef est déjà éxistant
+
+
+
+
             	return Writer::json_output($response,201,$serie);
 
             } catch (\Exception $e){
