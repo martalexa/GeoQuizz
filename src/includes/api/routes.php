@@ -24,8 +24,9 @@ $app->group('/admin', function () {
 	$this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 
 	$this->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
-    
-    $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance'],['name']);
+
+  $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance'],['name']);
+
 	$this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
 
 	$this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
@@ -41,5 +42,3 @@ $app->group('/admin', function () {
 	$this->get('/cities[/]','CityController:getCities')->setName('get_cities');
 
 })->add(new \App\Middleware\CheckJwt($container));
-
-
