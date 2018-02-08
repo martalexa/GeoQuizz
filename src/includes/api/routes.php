@@ -22,10 +22,9 @@ $app->group('/admin', function () {
 	$this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 
 	$this->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
-
+    
+    $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance']);
 	$this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
-
-	$this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
 
 	$this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
 
