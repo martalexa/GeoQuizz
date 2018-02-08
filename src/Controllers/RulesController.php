@@ -29,16 +29,64 @@ class RulesController extends BaseController
 
         $paliers = $rules['paliers'];
         $times = $rules['times'];
-        sort($times);
-        sort($paliers);
 
-        //CONTROLE
-        if(!$this->controleRules($times,"nb_seconds",$response)){
-            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
+        usort($times, function($r1, $r2){
+            if($r1['coef'] >= $r2['coef']){
+                return true;
+            }
+            return false;
+        });
+        usort($paliers, function($r1, $r2){
+            if($r1['coef'] >= $r2['coef']){
+                return true;
+            }
+            return false;
+        });
+
+        // var_dump($paliers);
+        // exit();
+
+        if(count($paliers) == 0 || count($times) == 0){
+            return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Une règle au moins est requise par type de paramétrage']);
         }
-        if(!$this->controleRules($paliers,"points",$response)){
-            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 2']);
+        //CONTROLE des paliers
+
+        $i = 1;
+
+        foreach ($paliers as $key => $palier) {
+            if((int)$palier['coef'] <= 0 || (int)$palier['points'] <= 0){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles distance: Les valeurs entieres positives uniquement']);
+            }
+
+            if(isset($paliers[$i]) && (int)$palier['coef'] == $paliers[$i]['coef']){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles distance: Pas de doublon de coefficient']);
+            }
+
+            $i ++;
         }
+
+        //CONTROLE des times
+
+        $i = 1;
+
+        foreach ($times as $key => $time) {
+            if((int)$time['coef'] <= 0 || (int)$time['nb_seconds'] <= 0){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles temps: Les valeurs entieres positives uniquement']);
+            }
+
+            if(isset($times[$i]) && (int)$time['nb_seconds'] == $times[$i]['nb_seconds']){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles temps: Pas de doublon de secondes']);
+            }
+
+            $i ++;
+        }
+
+        // if(!$this->controleRules($times,"nb_seconds",$response)){
+        //     return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
+        // }
+        // if(!$this->controleRules($paliers,"points",$response)){
+        //     return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 2']);
+        // }
 
 
         try{
@@ -108,7 +156,7 @@ class RulesController extends BaseController
             $i=1;
             foreach ($tableaux as $tab){
                 if (isset($tab['coef']) && !empty($tab['coef']) && isset($tab[$value]) && !empty($tab[$value])) {
-                    if(isset($tableaux[$i]['coef']) && !empty($tableaux[$i]['coef']) && isset($tableaux[$i][$value]) && !empty($tableaux[$i][$value])){
+                    if(isset($tableaux[$i]) && isset($tableaux[$i]['coef']) && !empty($tableaux[$i]['coef']) && isset($tableaux[$i][$value]) && !empty($tableaux[$i][$value])){
 
                             //les$valuede seconde suivant doivent etre plus grand
                             if($tab[$value] <= $tableaux[$i][$value]) {
