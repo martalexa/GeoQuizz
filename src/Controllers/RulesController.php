@@ -19,6 +19,8 @@ class RulesController extends BaseController
 {
 
     public function modifyRules( Request $request,Response $response, $args){
+
+
         $idSerie = filter_var($args['id'],FILTER_SANITIZE_NUMBER_INT);
 
         $rules = $request->getParsedBody();
@@ -76,6 +78,8 @@ class RulesController extends BaseController
             foreach($collection as $palier){
                 $palier->save();
             }
+
+            Writer::json_output($response, 201, $collection);
 
         } catch (ModelNotFoundException $e){
             return Writer::json_output($response, 404, array('type' => 'error', 'message' => 'The requested ressource was not found'));
