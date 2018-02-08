@@ -10,6 +10,7 @@ namespace App\Controllers;
 */
 use App\Models\Palier;
 use App\Models\Serie;
+use App\Models\City;
 use App\Models\Time;
 use App\Models\Photo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -59,28 +60,27 @@ class SerieController extends BaseController
 	    */
             $tab = $request->getParsedBody();
             $serie = new Serie();
-
-
-            $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
-            $serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
-
-
             try{
-            	$serie->save();
+	            $city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
 
+	            $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
+	            $serie->city_id = $city->id;
+	            
+            	$serie->save();
+            	$serie->city = $city;
             	// faire les valeurs par défault
                 $palier = new Palier();
                 $time = new Time();
                 // configureer les objet et faire un associate
                 // il faudra ensuite corriger le patch pour ne pas créer un nouvel objet
                 // lorsque le coef est déjà éxistant
-
-
-
-
             	return Writer::json_output($response,201,$serie);
 
-            } catch (\Exception $e){
+            }
+            catch (ModelNotFoundException $ex){
+            	return Writer::json_output($response, 404, array('type' => 'error', 'message' => 'ressource not found cities/'.$tab["city"]['id']));
+            }
+            catch (\Exception $e){
             // revoyer erreur format json
             	return Writer::json_output($response,500,['error' => 'Internal Server Error']);
             }
