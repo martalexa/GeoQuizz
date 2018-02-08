@@ -34,15 +34,11 @@ class TimeController extends BaseController
                 foreach ($times as $time){
                     if (isset($time['coef']) && !empty($time['coef']) && isset($time['nb_seconds']) && !empty($time['nb_seconds'])) {
                         if(isset($times[$i]['coef']) && !empty($times[$i]['coef']) && isset($times[$i]['nb_seconds']) && !empty($times[$i]['nb_seconds'])){
-                            // si le coef courant est inferieur au coef suivant
-                            if($time['coef'] < $times[$i]['coef']){
+
                                 //les nb_seconds de seconde suivant doivent etre plus grand
                                 if($time['nb_seconds'] <= $times[$i]['nb_seconds']) {
                                     return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
                                 }
-                            } else {
-                                return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials 2']);
-                            }
                         }
                     } else {
                         return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials 3']);

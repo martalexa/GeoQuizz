@@ -34,6 +34,8 @@ $app->group('/admin', function () {
 
 	$this->patch('/series/{id: [0-9]+}/times[/]', 'TimeController:createTime');
 
+	$this->put('/series/{id: [0-9]+}/rules[/]', 'RulesController:modifyRules');
+
 	$this->get('/cities[/]','CityController:getCities')->setName('get_cities');
 
 })->add(new \App\Middleware\CheckJwt($container));
