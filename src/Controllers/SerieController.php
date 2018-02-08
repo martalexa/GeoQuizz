@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Controllers;
-
 // use Ramsey\Uuid\Uuid;
 // use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
-
 /**
-* 
+*
 */
 use App\Models\Palier;
 use App\Models\Serie;
@@ -18,21 +15,20 @@ use App\Controllers\Writer;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Ramsey\Uuid\Uuid;
-
 class SerieController extends BaseController
 {
 	public function getSeries ($request,$response) {
 		$result = array();
 		$series = Serie::select()->get();
 		foreach ($series as $serie) {
-			
+
 			$result_temp =  $serie;
 			$result_temp->city = $serie->city()->select()->first();
+				$result_temp->image = $this->get('assets_path').'/uploads/'.$serie->image;
 			array_push($result,$result_temp);
-
 		}
-		return Writer::json_output($response,201,$result);
 
+		return Writer::json_output($response,201,$result);
 	}
 	public function getSerie($request,$response,$args) {
 		try {
@@ -46,7 +42,6 @@ class SerieController extends BaseController
 				$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
 				$photos[$key] = $photo;
 			}
-
 			foreach($paliers as $key => $palier){
 				$palier->url = $this->get('assets_path').'/uploads/' . $palier->url;
 				$paliers[$key] = $palier;
@@ -58,17 +53,14 @@ class SerieController extends BaseController
 			$result->paliers = $paliers;
 			$result->times = $times;
 			$result->photos = $photos;
-
-
 			return Writer::json_output($response,200,$result);
 		} catch (ModelNotFoundException $e) {
 			$notFoundHandler = $this->container->get('notFoundHandler');
 			return $notFoundHandler($request,$response);
-			
-		}
-		
-	}
 
+		}
+
+	}
 	public function createSerie(Request $request,Response $response){
 	    /* La création d'une série consiste à définir la ville
             concernée et la carte associée à cette série
@@ -89,7 +81,6 @@ class SerieController extends BaseController
             		return Writer::json_output($response,400,['error' => "Bad Request"]);
             	}
             }
-
             $paliers = array();
             try{
             	$city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
@@ -100,6 +91,7 @@ class SerieController extends BaseController
             	if(isset($tab['image']) && !empty($tab['image'])) {
             		$serie->image = $this->get('assets_path') . '/uploads/' . $serie->image;
             	}
+
 
             	$result = $serie;
             	// faire les valeurs par défault
@@ -124,7 +116,6 @@ class SerieController extends BaseController
             		$tableauxFor = array('id' => $palier->id, 'coef' => $palier->coef, 'points' => $palier->points);
             		array_push($tableaux,$tableauxFor);
             	}
-
             	array_push($paliers,['paliers' => $tableaux]);
 
             	$tableau2 = [];
@@ -151,7 +142,6 @@ class SerieController extends BaseController
             	array_push($paliers,["Times" => $tableau2]);
             	$result->rules = $paliers;
             	return Writer::json_output($response,201,["serie" => $result]);
-
             } catch (ModelNotFoundException $ex){
             	return Writer::json_output($response, 404, array('type' => 'error', 'message' => 'ressource not found cities/'.$tab["city"]['id']));
             } catch (\Exception $e){
@@ -159,7 +149,7 @@ class SerieController extends BaseController
             	return Writer::json_output($response,500,['error' => $e->getMessage()]);
             }
         }
-        
+
         public function getNumberPhotos(Request $request,Response $response,$args) {
         	try {
         		$serie=Serie::where("id","=",$args["id"])->firstOrFail();
@@ -168,32 +158,22 @@ class SerieController extends BaseController
         	} catch (Exception $e) {
         		return Writer::json_output($response,500,['error' => 'Internal Server Error']);
         	}
-
-
         }
-
         /*
         * Removes a game
         */
         public function deleteSerie($request, $response, $args) {
-
         	try {
-
         		$serie = Serie::findOrFail($args['id']);
-
         		$serie->delete();
-
         		return Writer::json_output($response, 204);
-
         	} catch (ModelNotFoundException $e) {
         		$notFoundHandler = $this->container->get('notFoundHandler');
         		return $notFoundHandler($request,$response);
         	}
-
         }
         public function editSerie($request,$response,$args) {
         	try {
-
         		$serie = Serie::findOrFail($args['id']);
         		$tab = $request->getParsedBody();
         		$serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
@@ -213,9 +193,7 @@ class SerieController extends BaseController
         		}
 
         		$serie->save();
-
         		return Writer::json_output($response,200, $serie);
-
         	} catch (ModelNotFoundException $e) {
         		$notFoundHandler = $this->container->get('notFoundHandler');
         		return $notFoundHandler($request,$response);
