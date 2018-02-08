@@ -5,12 +5,14 @@ $app->get('/parties[/]', 'PartieController:getParties')->setName('get_parties');
 $app->get('/parties/{id}[/]', 'PartieController:getPartie')->setName('get_partie');
 $app->post('/parties[/]','PartieController:createPartie')->setName('post_partie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['nb_photos','serie_id','player_username']);
 $app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
+$app->patch('/parties/{token}/state','PartieController:updateState')->setName('patch_status')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['state']);
+$app->patch('/parties/{token}/score','PartieController:updateScore')->setName('patch_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
 $app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 $app->get('/series/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
 
-	$app->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
-// Routes City
+$app->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
+
 
 
 // Routes User
