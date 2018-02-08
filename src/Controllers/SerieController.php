@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Controllers\Writer;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Ramsey\Uuid\Uuid;
 
 class SerieController extends BaseController
 {
@@ -68,35 +69,94 @@ class SerieController extends BaseController
 		
 	}
 
-	public function createSerie(Request $request,Response $response,$args){
+	public function createSerie(Request $request,Response $response){
 	    /* La création d'une série consiste à définir la ville
             concernée et la carte associée à cette série
 	    */
             $tab = $request->getParsedBody();
             $serie = new Serie();
+            $serie->name = filter_var($tab["name"],FILTER_SANITIZE_STRING);
+            $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
+            if(isset($tab['image']) && !empty($tab['image'])){
+                $photo_str = $tab['image'];
+                $testPhoto = new PhotoController($this->container);
+                $test = $testPhoto->check_base64_image($photo_str,$response);
+                if ($test) {
+                    $serie->image = Uuid::uuid1() . '.png';
+                    $photo_str = base64_decode($photo_str);
+                    file_put_contents($this->get('upload_path') . '/' . $serie->image, $photo_str);
+                } else {
+                    return Writer::json_output($response,400,['error' => "Bad Request"]);
+                }
+            }
+
+            $paliers = array();
             try{
-            	$city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
+                $city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
+                $serie->city_id = filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT);
+                $serie->save();
+                $serie->city = $city;
 
-            	$serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
-            	$serie->city_id = $city->id;
-            	
-            	$serie->save();
-            	$serie->city = $city;
+                if(isset($tab['image']) && !empty($tab['image'])) {
+                    $serie->image = $this->get('assets_path') . '/uploads/' . $serie->image;
+                }
+
+                $result = $serie;
             	// faire les valeurs par défault
-            	$palier = new Palier();
-            	$time = new Time();
-                // configureer les objet et faire un associate
-                // il faudra ensuite corriger le patch pour ne pas créer un nouvel objet
-                // lorsque le coef est déjà éxistant
-            	return Writer::json_output($response,201,$serie);
+                // 3 palier par default
+                $tableaux = [];
+                for ($i=1; $i<4; $i++) {
+                    $palier = new Palier();
+                    $palier->coef = $i;
+                    switch ($i) {
+                        case 1:
+                            $palier->points = 5;
+                            break;
+                        case 2:
+                            $palier->points = 3;
+                            break;
+                        case 3:
+                            $palier->points = 1;
+                            break;
+                    }
+                    $palier->serie()->associate($serie);
+                    $palier->save();
+                    $tableauxFor = array('id' => $palier->id, 'coef' => $palier->coef, 'points' => $palier->points);
+                    array_push($tableaux,$tableauxFor);
+                }
 
-            }
-            catch (ModelNotFoundException $ex){
+                array_push($paliers,['paliers' => $tableaux]);
+
+                $tableau2 = [];
+                // 3 temps par defaults
+                for ($i = 4 ; $i >= 1;$i = $i / 2) {
+                    $time = new Time();
+                    $time->coef = $i;
+                    switch ($i) {
+                        case 4:
+                            $time->nb_seconds = 5;
+                            break;
+                        case 2:
+                            $time->nb_seconds = 10;
+                            break;
+                        case 1:
+                            $time->nb_seconds = 20;
+                            break;
+                    }
+                    $time->serie()->associate($serie);
+                    $time->save();
+                    $tableauxFor2 = array('id' => $time->id, 'coef' => $time->coef, 'seconds' => $time->nb_seconds);
+                    array_push($tableau2,$tableauxFor2);
+                }
+                array_push($paliers,["Times" => $tableau2]);
+                $result->rules = $paliers;
+            	return Writer::json_output($response,201,["serie" => $result]);
+
+            } catch (ModelNotFoundException $ex){
             	return Writer::json_output($response, 404, array('type' => 'error', 'message' => 'ressource not found cities/'.$tab["city"]['id']));
-            }
-            catch (\Exception $e){
+            } catch (\Exception $e){
             // revoyer erreur format json
-            	return Writer::json_output($response,500,['error' => 'Internal Server Error']);
+            	return Writer::json_output($response,500,['error' => $e->getMessage()]);
             }
         }
         

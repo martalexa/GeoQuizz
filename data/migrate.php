@@ -133,6 +133,20 @@ class Migrator {
                 $table->foreign('serie_id')->references('id')->on('serie')->onDelete('cascade');
             });
         }
+        /**
+         * create table temps
+         */
+        if (!Capsule::schema()->hasTable('user')) {
+            Capsule::schema()->create('user', function($table)
+            {
+                $table->integer('id', true);
+                $table->string('username');
+                $table->string('password');
+
+                $table->engine = 'InnoDB';
+
+            });
+        }
 
     }
 }

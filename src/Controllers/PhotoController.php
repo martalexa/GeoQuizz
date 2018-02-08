@@ -6,8 +6,8 @@ namespace App\Controllers;
 * 
 */
 use App\Models\Photo;
+use App\Models\Serie;
 use Ramsey\Uuid\Uuid;
-use Spatie\Image\Image;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\Translation\Dumper\PoFileDumper;
 
@@ -46,9 +46,6 @@ public function createPhoto($request, $response, $args)
         $photo_str = base64_decode($photo_str);
         $picture = new Photo();
         $picture->url = Uuid::uuid1() . '.png';
-        if (isset($tab['description']) && !empty($tab['description'])) {
-            $picture->description = filter_var($tab['description'], FILTER_SANITIZE_SPECIAL_CHARS);
-        }
         $picture->lat = filter_var($tab['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
         $picture->lng = filter_var($tab['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
         $picture->serie_id = filter_var($tab['serie_id'], FILTER_SANITIZE_NUMBER_INT);
@@ -63,9 +60,10 @@ public function createPhoto($request, $response, $args)
 
             $picture->lat = filter_var($tab['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
             $picture->lng = filter_var($tab['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $picture->serie_id = filter_var($tab['serie_id'], FILTER_SANITIZE_NUMBER_INT);
 
         try {
+            $serie = Serie::findOrFail($args["id"]);
+            $picture->serie_id = $serie->id;
             file_put_contents($this->get('upload_path') . '/' . $picture->url, $photo_str);
             $picture->save();
             $picture->url = $this->get('assets_path') . '/uploads/' . $picture->url;

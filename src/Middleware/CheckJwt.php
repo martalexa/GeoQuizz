@@ -7,6 +7,8 @@
  */
 
 namespace App\Middleware;
+use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use Firebase\JWT\JWT;
@@ -42,7 +44,15 @@ class CheckJwt extends Middleware
             $header = $req->getHeader('Authorization')[0];
             $mysecret = 'je suis un secret $µ°';
             $tokenString = sscanf($header,"Bearer %s")[0];
+
             $token = JWT::decode($tokenString,$mysecret,['HS512']);
+
+            // Aucune Faille
+            try{
+                $user = User::where('id','=',$token->uid)->firstOrFail();
+            } catch (ModelNotFoundException $e){
+                return Writer::json_output($resp,401,['error' => "wrong token"]);
+            }
 
 
         } catch(ExpiredException $e){

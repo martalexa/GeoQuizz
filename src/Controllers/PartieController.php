@@ -86,7 +86,7 @@ class PartieController extends BaseController
     			$photos[$key] = $photo;
     		}
     		$result->serie->photos = $photos;
-    		return Writer::json_output($response,200,$result);
+    		return Writer::json_output($response,201,$result);
 
 
     	} catch (\Exception $e){
@@ -105,7 +105,7 @@ class PartieController extends BaseController
     public function updateScore($request, $response, $args) {
     	$tab = $request->getParsedBody();
     	try {
-    		$partie = Partie::where("id","=",$args["id"])->firstOrFail();
+    		$partie = Partie::where("token","=",$args["token"])->firstOrFail();
     	} catch (ModelNotFoundException $e) {
     		$notFoundHandler = $this->container->get('notFoundHandler');
     		return $notFoundHandler($request,$response);
@@ -126,7 +126,16 @@ class PartieController extends BaseController
     /**
      *
      */
-    public function changeStatePartie(){
-
+    public function updateState($request, $response, $args){
+    	$tab = $request->getParsedBody();
+    	try {
+    		$partie = Partie::where("token","=",$args["token"])->firstOrFail();
+    		$partie->state =filter_var($tab["state"],FILTER_SANITIZE_NUMBER_FLOAT);
+    		$partie->save();
+    		return Writer::json_output($response,200,$partie);
+    	} catch (ModelNotFoundException $e) {
+    		$notFoundHandler = $this->container->get('notFoundHandler');
+    		return $notFoundHandler($request,$response);
+    	}
     }
 }

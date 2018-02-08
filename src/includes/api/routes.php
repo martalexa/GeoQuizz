@@ -5,12 +5,14 @@ $app->get('/parties[/]', 'PartieController:getParties')->setName('get_parties');
 $app->get('/parties/{id}[/]', 'PartieController:getPartie')->setName('get_partie');
 $app->post('/parties[/]','PartieController:createPartie')->setName('post_partie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['nb_photos','serie_id','player_username']);
 $app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
+$app->patch('/parties/{token}/state','PartieController:updateState')->setName('patch_status')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['state']);
+$app->patch('/parties/{token}/score','PartieController:updateScore')->setName('patch_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
 $app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 $app->get('/series/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
 
-	$app->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
-// Routes City
+$app->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
+
 
 
 // Routes User
@@ -23,7 +25,8 @@ $app->group('/admin', function () {
 
 	$this->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
 
-  $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance']);
+  $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance'],['name']);
+
 	$this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
 
 	$this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
@@ -34,6 +37,13 @@ $app->group('/admin', function () {
 
 	$this->patch('/series/{id: [0-9]+}/times[/]', 'TimeController:createTime');
 
+	$this->put('/series/{id: [0-9]+}/rules[/]', 'RulesController:modifyRules');
+
 	$this->get('/cities[/]','CityController:getCities')->setName('get_cities');
 
 })->add(new \App\Middleware\CheckJwt($container));
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cd1a949cb7cf5ff18e97d001b0821f8de2a75e86
