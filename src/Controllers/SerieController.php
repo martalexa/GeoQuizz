@@ -9,6 +9,7 @@ namespace App\Controllers;
 * 
 */
 use App\Models\Serie;
+use App\Models\City;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Controllers\Writer;
 use Slim\Http\Request;
@@ -48,17 +49,22 @@ class SerieController extends BaseController
 	    */
             $tab = $request->getParsedBody();
             $serie = new Serie();
-
-
-            $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
-            $serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
-
-
             try{
+	            $city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
+
+	            $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
+	            $serie->city_id = $city->id;
+	            
             	$serie->save();
+
+            	$serie->city = $city;
             	return Writer::json_output($response,201,$serie);
 
-            } catch (\Exception $e){
+            }
+            catch (ModelNotFoundException $ex){
+            	return Writer::json_output($response, 404, array('type' => 'error', 'message' => 'ressource not found cities/'.$tab["city"]['id']));
+            }
+            catch (\Exception $e){
             // revoyer erreur format json
             	return Writer::json_output($response,500,['error' => 'Internal Server Error']);
             }
