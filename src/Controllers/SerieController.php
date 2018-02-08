@@ -43,11 +43,9 @@ class SerieController extends BaseController
 				$photos[$key] = $photo;
 			}
 			foreach($paliers as $key => $palier){
-				$palier->url = $this->get('assets_path').'/uploads/' . $palier->url;
 				$paliers[$key] = $palier;
 			}
 			foreach($times as $key => $time){
-				$time->url = $this->get('assets_path').'/uploads/' . $time->url;
 				$times[$key] = $time;
 			}
 			$result->paliers = $paliers;
