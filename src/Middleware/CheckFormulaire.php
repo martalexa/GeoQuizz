@@ -10,7 +10,7 @@ use App\Controllers\Writer;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use App\Models\Serie;
-class CheckFormulaire {
+class CheckFormulaire extends Middleware {
     public  function checkFormulaire (Request $req, Response $resp, $next)
     {
         $checked = null;

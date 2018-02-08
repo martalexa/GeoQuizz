@@ -53,7 +53,7 @@ class PalierController extends BaseController {
                         }
                         $i++;
                         // Si une des valeurs est en dessous de 0
-                        if($palier['coef'] < 0 || $palier['points'] < 0){
+                        if($palier['coef'] <= 0 || $palier['points'] < 0){
                             return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials2']);
                         }
                     } else {

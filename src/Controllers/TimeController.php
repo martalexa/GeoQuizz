@@ -49,7 +49,7 @@ class TimeController extends BaseController
                     }
                     $i++;
                     // Si une des valeurs est en dessous de 0
-                    if($time['coef'] < 0 || $time['nb_seconds'] < 0){
+                    if($time['coef'] <= 0 || $time['nb_seconds'] < 0){
                         return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials2']);
                     }
                 }

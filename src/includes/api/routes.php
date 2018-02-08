@@ -31,5 +31,5 @@
         $this->patch('/series/{id: [0-9]+}/times[/]', 'TimeController:createTime');
 
         $this->get('/cities[/]','CityController:getCities')->setName('get_cities');
-        
+
     })->add(new \App\Middleware\CheckJwt($container));

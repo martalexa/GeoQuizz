@@ -11,12 +11,21 @@ use \Illuminate\Database\Eloquent\Model;
 
 
 /**
- * Class Categorie
- * @package Api\models
+ * Class User
+ * @package App\Models
  */
 class User extends Model {
 
+    /**
+     * @var string
+     */
     protected $table = 'user';
+    /**
+     * @var string
+     */
     protected $primaryKey = 'id';
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 }

@@ -7,7 +7,6 @@ namespace App\Controllers;
 */
 use App\Models\Photo;
 use Ramsey\Uuid\Uuid;
-use Spatie\Image\Image;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\Translation\Dumper\PoFileDumper;
 
