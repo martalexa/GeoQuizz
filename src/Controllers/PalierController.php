@@ -42,14 +42,12 @@ class PalierController extends BaseController {
                         // si le palier suivant existe
                         if(isset($paliers[$i]['coef']) && !empty($paliers[$i]['coef']) && isset($paliers[$i]['points']) && !empty($paliers[$i]['points'])){
                             // si le palier courant est inferieur au palier suivant
-                            if($palier['coef'] < $paliers[$i]['coef']){
+
                                 //les points du palier suivant doivent etre plus petit
                                 if($palier['points'] <= $paliers[$i]['points']) {
                                     return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials']);
                                 }
-                            } else {
-                               return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials1']);
-                            }
+
                         }
                         $i++;
                         // Si une des valeurs est en dessous de 0

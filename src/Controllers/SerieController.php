@@ -75,7 +75,7 @@ class SerieController extends BaseController
 	    */
             $tab = $request->getParsedBody();
             $serie = new Serie();
-            $serie->name = filter_var($tab["name"],FILTER_SANITIZE_STRING)
+            $serie->name = filter_var($tab["name"],FILTER_SANITIZE_STRING);
             $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
             if(isset($tab['image']) && !empty($tab['image'])){
             	$photo_str = $tab['image'];
