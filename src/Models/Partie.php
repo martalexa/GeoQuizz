@@ -20,12 +20,9 @@ class Partie extends Model {
     protected $table = 'partie';
     protected $primaryKey = 'id';
     public $timestamps = false;
+        protected $hidden = ["serie_id"];
 
     public function serie(){
         return $this->belongsTo(Serie::class, 'serie_id');
-    }
-
-    public function photos(){
-        return $this->hasMany(Photo::class, 'partie_id');
     }
 }

@@ -14,6 +14,9 @@ $container['SerieController'] = function($c){
 $container['PhotoController'] = function ($c) {
     return new App\Controllers\PhotoController($c);
 };
+$container['CityController'] = function ($c) {
+    return new App\Controllers\CityController($c);
+};
 
 $container['UserController'] = function($c){
 	return new App\Controllers\UserController($c);
@@ -23,6 +26,9 @@ $container['PalierController'] = function($c){
     return new App\Controllers\PalierController($c);
 };
 
+$container['TimeController'] = function($c){
+    return new \App\Controllers\TimeController($c);
+};
 //Photo upload path
 
 $container['upload_path'] = __DIR__.'/../../../web/uploads';
