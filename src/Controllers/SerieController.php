@@ -10,7 +10,9 @@ namespace App\Controllers;
 */
 use App\Models\Palier;
 use App\Models\Serie;
+use App\Models\City;
 use App\Models\Time;
+use App\Models\Photo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Controllers\Writer;
 use Slim\Http\Request;
@@ -35,8 +37,30 @@ class SerieController extends BaseController
 	public function getSerie($request,$response,$args) {
 		try {
 			$serie = Serie::where("id","=",$args["id"])->firstOrFail();
+			$result = $serie;
+			$result->city = $serie->city()->select()->first();
+			$photos = $serie->photos()->select("id","description","url","lat","lng")->get();
+			$paliers = $serie->paliers()->get() ;
+			$times = $serie->times()->get() ;
+			foreach($photos as $key => $photo){
+				$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
+				$photos[$key] = $photo;
+			}
 
-			return Writer::json_output($response,201,$serie);
+			foreach($paliers as $key => $palier){
+				$palier->url = $this->get('assets_path').'/uploads/' . $palier->url;
+				$paliers[$key] = $palier;
+			}
+			foreach($times as $key => $time){
+				$time->url = $this->get('assets_path').'/uploads/' . $time->url;
+				$times[$key] = $time;
+			}
+			$result->paliers = $paliers;
+			$result->times = $times;
+			$result->photos = $photos;
+
+
+			return Writer::json_output($response,200,$result);
 		} catch (ModelNotFoundException $e) {
 			$notFoundHandler = $this->container->get('notFoundHandler');
 			return $notFoundHandler($request,$response);
@@ -53,7 +77,6 @@ class SerieController extends BaseController
             $serie = new Serie();
 
             $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
-            $serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
             if(isset($tab['image']) && !empty($tab['image'])){
                 $photo_str = $tab['image'];
                 $testPhoto = new PhotoController($this->container);
@@ -69,7 +92,11 @@ class SerieController extends BaseController
 
             $paliers = array();
             try{
-            	$serie->save();
+                $city = City::findOrFail(filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT));
+                $serie->city_id = filter_var($tab["city"]['id'],FILTER_SANITIZE_NUMBER_INT);
+                $serie->save();
+                $serie->city = $city;
+
                 if(isset($tab['image']) && !empty($tab['image'])) {
                     $serie->image = $this->get('assets_path') . '/uploads/' . $serie->image;
                 }
@@ -125,6 +152,8 @@ class SerieController extends BaseController
                 $result->rules = $paliers;
             	return Writer::json_output($response,201,["serie" => $result]);
 
+            } catch (ModelNotFoundException $ex){
+            	return Writer::json_output($response, 404, array('type' => 'error', 'message' => 'ressource not found cities/'.$tab["city"]['id']));
             } catch (\Exception $e){
             // revoyer erreur format json
             	return Writer::json_output($response,500,['error' => $e->getMessage()]);
@@ -148,18 +177,35 @@ class SerieController extends BaseController
         */
         public function deleteSerie($request, $response, $args) {
 
-			try {
+        	try {
 
-				$serie = Serie::findOrFail($args['id']);
+        		$serie = Serie::findOrFail($args['id']);
 
-				$serie->delete();
+        		$serie->delete();
 
-				return Writer::json_output($response, 204);
+        		return Writer::json_output($response, 204);
 
-			} catch (ModelNotFoundException $e) {
-				$notFoundHandler = $this->container->get('notFoundHandler');
-				return $notFoundHandler($request,$response);
-			}
-		
-		}
+        	} catch (ModelNotFoundException $e) {
+        		$notFoundHandler = $this->container->get('notFoundHandler');
+        		return $notFoundHandler($request,$response);
+        	}
+
+        }
+        public function editSerie($request,$response,$args) {
+        	try {
+
+        		$serie = Serie::findOrFail($args['id']);
+        		$tab = $request->getParsedBody();
+        		$serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
+        		$serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
+        		$serie->image = filter_var($tab["image"],FILTER_SANITIZE_STRING);
+        		$serie->save();
+
+        		return Writer::json_output($response,200, $serie);
+
+        	} catch (ModelNotFoundException $e) {
+        		$notFoundHandler = $this->container->get('notFoundHandler');
+        		return $notFoundHandler($request,$response);
+        	}
+        }
     }
