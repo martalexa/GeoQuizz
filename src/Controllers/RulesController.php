@@ -36,8 +36,8 @@ class RulesController extends BaseController
         if(!$this->controleRules($times,"nb_seconds",$response)){
             return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
         }
-        if($this->controleRules($paliers,"points",$response)){
-            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
+        if(!$this->controleRules($paliers,"points",$response)){
+            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 2']);
         }
 
 
@@ -114,6 +114,8 @@ class RulesController extends BaseController
                             if($tab[$value] <= $tableaux[$i][$value]) {
                                 return false;
                             }
+                    } else {
+                        return true;
                     }
                 } else {
                     return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials 3']);
