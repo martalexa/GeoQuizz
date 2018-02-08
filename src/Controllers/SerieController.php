@@ -81,18 +81,35 @@ class SerieController extends BaseController
         */
         public function deleteSerie($request, $response, $args) {
 
-			try {
+        	try {
 
-				$serie = Serie::findOrFail($args['id']);
+        		$serie = Serie::findOrFail($args['id']);
 
-				$serie->delete();
+        		$serie->delete();
 
-				return Writer::json_output($response, 204);
+        		return Writer::json_output($response, 204);
 
-			} catch (ModelNotFoundException $e) {
-				$notFoundHandler = $this->container->get('notFoundHandler');
-				return $notFoundHandler($request,$response);
-			}
-		
-		}
+        	} catch (ModelNotFoundException $e) {
+        		$notFoundHandler = $this->container->get('notFoundHandler');
+        		return $notFoundHandler($request,$response);
+        	}
+
+        }
+        public function editSerie($request,$response,$args) {
+        	try {
+
+        		$serie = Serie::findOrFail($args['id']);
+        		$tab = $request->getParsedBody();
+        		$serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
+        		$serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
+        		$serie->image = filter_var($tab["image"],FILTER_SANITIZE_STRING);
+        		$serie->save();
+
+        		return Writer::json_output($response,200, $serie);
+
+        	} catch (ModelNotFoundException $e) {
+        		$notFoundHandler = $this->container->get('notFoundHandler');
+        		return $notFoundHandler($request,$response);
+        	}
+        }
     }

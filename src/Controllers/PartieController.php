@@ -44,7 +44,7 @@ class PartieController extends BaseController
     		$result = $partie;
     		$serie = $partie->serie()->first();
     		$result->serie = $serie;
-    		$result->serie->city= $serie->city()->select("zoom_level","name","lat","lng")->first();
+    		$result->serie->city= $serie->city()->select()->first();
 
 
     		return Writer::json_output($response,200,$result);
@@ -77,8 +77,8 @@ class PartieController extends BaseController
     		$result = $partie;
     		$serie = $partie->serie()->first();
     		$result->serie = $serie;
-    		$result->serie->city= $serie->city()->select("zoom_level","name","lat","lng")->first();
-    		$photos = $serie->photos()->select("description","url","lat","lng")->orderByRaw("RAND()")->take($partie->nb_photos)->get();
+    		$result->serie->city= $serie->city()->select()->first();
+    		$photos = $serie->photos()->select("id","description","url","lat","lng")->orderByRaw("RAND()")->take($partie->nb_photos)->get();
     		foreach($photos as $key => $photo){
     			$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
     			$photos[$key] = $photo;

@@ -1,33 +1,36 @@
 <?php
 
 // Routes Parties
-	$app->get('/parties[/]', 'PartieController:getParties')->setName('get_parties');
-	$app->get('/parties/{id}[/]', 'PartieController:getPartie')->setName('get_partie');
-	$app->post('/parties[/]','PartieController:createPartie')->setName('post_partie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['nb_photos','serie_id','player_username']);
-	$app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
+$app->get('/parties[/]', 'PartieController:getParties')->setName('get_parties');
+$app->get('/parties/{id}[/]', 'PartieController:getPartie')->setName('get_partie');
+$app->post('/parties[/]','PartieController:createPartie')->setName('post_partie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['nb_photos','serie_id','player_username']);
+$app->put('/parties/{id}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
-    $app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
-	$app->get('/serie/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
+$app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
+$app->get('/serie/{id}/count[/]','SerieController:getNumberPhotos')->setName('get_count_photos');
 
 // Routes City
 
 
 // Routes User
-	$app->post('/admin/signup[/]', 'UserController:createUser')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['username','password']);
-    $app->post('/admin/signin[/]', 'UserController:connectUser');
+$app->post('/admin/signup[/]', 'UserController:createUser')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['username','password']);
+$app->post('/admin/signin[/]', 'UserController:connectUser');
 
-    $app->group('/admin', function () {
+$app->group('/admin', function () {
 
-        $this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
+    $this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
 
-        $this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
+    $this->delete('/series/{id: [0-9]+}[/]', 'SerieController:deleteSeries')->setName('delete_serie');
 
-        $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
+    $this->post('/series[/]', 'SerieController:createSerie')->setName('post_serie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['distance','city_id']);
 
-        $this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
+    $this->post('/series/{id: [0-9]+}/photos[/]', 'PhotoController:createPhoto')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['photo','lat','lng']);
 
-        $this->patch('/series/{id: [0-9]+}/paliers[/]', 'PalierController:createPalier');
+    $this->patch('/series/{id: [0-9]+}/paliers[/]', 'PalierController:createPalier');
 
-        $this->get('/cities[/]','CityController:getCities')->setName('get_cities');
-      
-    })->add(new \App\Middleware\CheckJwt($container));
+
+    $this->patch('/series/{id: [0-9]+}/edit[/]', 'SerieController:editSerie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['image','city_id','distance']);
+
+    $this->get('/cities[/]','CityController:getCities')->setName('get_cities');
+    
+})->add(new \App\Middleware\CheckJwt($container));
