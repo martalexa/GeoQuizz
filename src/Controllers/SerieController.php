@@ -33,6 +33,22 @@ class SerieController extends BaseController
 
         return Writer::json_output($response,201,$result);
     }
+    public function getBackSeries ($request,$response) {
+        $result = array();
+        $series = Serie::select()->get();
+        foreach ($series as $serie) {
+          //  if ($serie->photos()->count()>=10)
+         //   {
+                $result_temp =  $serie;
+                $result_temp->city = $serie->city()->select()->first();
+                $result_temp->image = $this->get('assets_path').'/uploads/'.$serie->image;
+                array_push($result,$result_temp);
+           // }
+
+        }
+
+        return Writer::json_output($response,201,$result);
+    }
     public function getSerie($request,$response,$args) {
       try {
          $serie = Serie::where("id","=",$args["id"])->firstOrFail();

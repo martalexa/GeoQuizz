@@ -21,7 +21,7 @@ $app->post('/admin/signin[/]', 'UserController:connectUser');
 
 $app->group('/admin', function () {
 
-	$this->get('/series[/]', 'SerieController:getSeries')->setName('get_series');
+	$this->get('/series[/]', 'SerieController:getBackSeries')->setName('get_back_series');
 
 	$this->get('/series/{id: [0-9]+}[/]','SerieController:getSerie')->setName('get_serie');
 
