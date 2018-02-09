@@ -21,47 +21,48 @@ class SerieController extends BaseController
 		$result = array();
 		$series = Serie::select()->get();
 		foreach ($series as $serie) {
+            if ($serie->photos()->count()>=10)
+            {
+                $result_temp =  $serie;
+                $result_temp->city = $serie->city()->select()->first();
+                $result_temp->image = $this->get('assets_path').'/uploads/'.$serie->image;
+                array_push($result,$result_temp);
+            }
+            
+        }
 
-			$result_temp =  $serie;
-			$result_temp->city = $serie->city()->select()->first();
-				$result_temp->image = $this->get('assets_path').'/uploads/'.$serie->image;
-			array_push($result,$result_temp);
-		}
+        return Writer::json_output($response,201,$result);
+    }
+    public function getSerie($request,$response,$args) {
+      try {
+         $serie = Serie::where("id","=",$args["id"])->firstOrFail();
+         $result = $serie;
+         $result->city = $serie->city()->select()->first();
+         $photos = $serie->photos()->select("id","description","url","lat","lng")->get();
+         $paliers = $serie->paliers()->get() ;
+         $times = $serie->times()->get() ;
+         foreach($photos as $key => $photo){
+            $photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
+            $photos[$key] = $photo;
+        }
+        foreach($paliers as $key => $palier){
+            $paliers[$key] = $palier;
+        }
+        foreach($times as $key => $time){
+            $times[$key] = $time;
+        }
+        $result->paliers = $paliers;
+        $result->times = $times;
+        $result->photos = $photos;
+        return Writer::json_output($response,200,$result);
+    } catch (ModelNotFoundException $e) {
+     $notFoundHandler = $this->container->get('notFoundHandler');
+     return $notFoundHandler($request,$response);
 
-		return Writer::json_output($response,201,$result);
-	}
-	public function getSerie($request,$response,$args) {
-		try {
-			$serie = Serie::where("id","=",$args["id"])->firstOrFail();
-			$result = $serie;
-			$result->city = $serie->city()->select()->first();
-			$photos = $serie->photos()->select("id","description","url","lat","lng")->get();
-			$paliers = $serie->paliers()->get() ;
-			$times = $serie->times()->get() ;
-			foreach($photos as $key => $photo){
-				$photo->url = $this->get('assets_path').'/uploads/' . $photo->url;
-				$photos[$key] = $photo;
-			}
-			foreach($paliers as $key => $palier){
-				$palier->url = $this->get('assets_path').'/uploads/' . $palier->url;
-				$paliers[$key] = $palier;
-			}
-			foreach($times as $key => $time){
-				$time->url = $this->get('assets_path').'/uploads/' . $time->url;
-				$times[$key] = $time;
-			}
-			$result->paliers = $paliers;
-			$result->times = $times;
-			$result->photos = $photos;
-			return Writer::json_output($response,200,$result);
-		} catch (ModelNotFoundException $e) {
-			$notFoundHandler = $this->container->get('notFoundHandler');
-			return $notFoundHandler($request,$response);
+ }
 
-		}
-
-	}
-	public function createSerie(Request $request,Response $response){
+}
+public function createSerie(Request $request,Response $response){
 	    /* La création d'une série consiste à définir la ville
             concernée et la carte associée à cette série
 	    */
@@ -178,25 +179,25 @@ class SerieController extends BaseController
         		$tab = $request->getParsedBody();
         		$serie->city_id = filter_var($tab["city_id"],FILTER_SANITIZE_STRING);
                 $serie->name = filter_var($tab["name"],FILTER_SANITIZE_STRING);
-        		$serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
-        		if(isset($tab['image']) && !empty($tab['image'])){
-        			$photo_str = $tab['image'];
-        			$testPhoto = new PhotoController($this->container);
-        			$test = $testPhoto->check_base64_image($photo_str,$response);
-        			if ($test) {
-        				$serie->image = Uuid::uuid1() . '.png';
-        				$photo_str = base64_decode($photo_str);
-        				file_put_contents($this->get('upload_path') . '/' . $serie->image, $photo_str);
-        			} else {
-        				return Writer::json_output($response,400,['error' => "Bad Request"]);
-        			}
-        		}
+                $serie->distance = filter_var($tab["distance"],FILTER_SANITIZE_STRING);
+                if(isset($tab['image']) && !empty($tab['image'])){
+                 $photo_str = $tab['image'];
+                 $testPhoto = new PhotoController($this->container);
+                 $test = $testPhoto->check_base64_image($photo_str,$response);
+                 if ($test) {
+                    $serie->image = Uuid::uuid1() . '.png';
+                    $photo_str = base64_decode($photo_str);
+                    file_put_contents($this->get('upload_path') . '/' . $serie->image, $photo_str);
+                } else {
+                    return Writer::json_output($response,400,['error' => "Bad Request"]);
+                }
+            }
 
-        		$serie->save();
-        		return Writer::json_output($response,200, $serie);
-        	} catch (ModelNotFoundException $e) {
-        		$notFoundHandler = $this->container->get('notFoundHandler');
-        		return $notFoundHandler($request,$response);
-        	}
-        }
-    }
+            $serie->save();
+            return Writer::json_output($response,200, $serie);
+        } catch (ModelNotFoundException $e) {
+          $notFoundHandler = $this->container->get('notFoundHandler');
+          return $notFoundHandler($request,$response);
+      }
+  }
+}
