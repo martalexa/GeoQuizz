@@ -43,11 +43,9 @@ class SerieController extends BaseController
 				$photos[$key] = $photo;
 			}
 			foreach($paliers as $key => $palier){
-				$palier->url = $this->get('assets_path').'/uploads/' . $palier->url;
 				$paliers[$key] = $palier;
 			}
 			foreach($times as $key => $time){
-				$time->url = $this->get('assets_path').'/uploads/' . $time->url;
 				$times[$key] = $time;
 			}
 			$result->paliers = $paliers;
@@ -162,7 +160,7 @@ class SerieController extends BaseController
         /*
         * Removes a game
         */
-        public function deleteSerie($request, $response, $args) {
+        public function deleteSeries($request, $response, $args) {
         	try {
         		$serie = Serie::findOrFail($args['id']);
         		$serie->delete();
@@ -172,6 +170,8 @@ class SerieController extends BaseController
         		return $notFoundHandler($request,$response);
         	}
         }
+
+
         public function editSerie($request,$response,$args) {
         	try {
         		$serie = Serie::findOrFail($args['id']);
