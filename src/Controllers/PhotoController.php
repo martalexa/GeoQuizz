@@ -36,6 +36,8 @@ public function check_base64_image($base64, $response)
 
 public function createPhoto($request, $response, $args)
 {
+    // var_dump(Serie::find(4)->photos->count());
+    // exit();
 
     $tab = $request->getParsedBody();
 
@@ -48,7 +50,7 @@ public function createPhoto($request, $response, $args)
         $picture->url = Uuid::uuid1() . '.png';
         $picture->lat = filter_var($tab['lat'], FILTER_SANITIZE_SPECIAL_CHARS);
         $picture->lng = filter_var($tab['lng'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $picture->serie_id = filter_var($tab['serie_id'], FILTER_SANITIZE_NUMBER_INT);
+        $picture->serie_id = filter_var($args['id'], FILTER_SANITIZE_NUMBER_INT);
 
 
 
@@ -68,8 +70,6 @@ public function createPhoto($request, $response, $args)
             $picture->save();
             $picture->url = $this->get('assets_path') . '/uploads/' . $picture->url;
             return Writer::json_output($response, 201, $picture);
-
-
 
         } catch (\Exception $e) {
             $response = $response->withHeader('Content-Type', 'application/json')->withStatus(500);
