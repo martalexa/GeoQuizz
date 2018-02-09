@@ -26,6 +26,10 @@ class SerieController extends BaseController
                 $result_temp =  $serie;
                 $result_temp->city = $serie->city()->select()->first();
                 $result_temp->image = $this->get('assets_path').'/uploads/'.$serie->image;
+                $result_temp->rules = [
+                    "paliers" => $serie->paliers()->get(),
+                    "times" => $serie->times()->get()
+                ];
                 array_push($result,$result_temp);
             }
             
