@@ -37,6 +37,7 @@ class Migrator {
                 $table->integer('id', true);
                 $table->string('distance')->default('');
                 $table->string('image')->default('');
+                $table->string('name')->default('');
                 $table->timestamp('updated_at')->default(Capsule::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
                 $table->timestamp('created_at')->default(Capsule::raw('CURRENT_TIMESTAMP'));
                 //FK

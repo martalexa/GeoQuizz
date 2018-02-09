@@ -19,7 +19,6 @@ use App\Models\City;
 class RulesController extends BaseController
 {
 
-    // TODO : CORRIGER LES WRITERS POUR RENVOYE TJR LE MM MESSAGES
     public function modifyRules( Request $request,Response $response, $args){
 
 
@@ -29,23 +28,61 @@ class RulesController extends BaseController
 
         $paliers = $rules['paliers'];
         $times = $rules['times'];
-        sort($times);
-        sort($paliers);
 
-        //CONTROLE
-        if(!$this->controleRules($times,"nb_seconds",$response)){
-            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 1']);
+        usort($times, function($r1, $r2){
+            if($r1['coef'] >= $r2['coef']){
+                return true;
+            }
+            return false;
+        });
+        usort($paliers, function($r1, $r2){
+            if($r1['coef'] >= $r2['coef']){
+                return true;
+            }
+            return false;
+        });
+
+        // var_dump($paliers);
+        // exit();
+
+        if(count($paliers) == 0 || count($times) == 0){
+            return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Une règle au moins est requise par type de paramétrage']);
         }
-        if(!$this->controleRules($paliers,"points",$response)){
-            return Writer::json_output($response, 401, ['type:' => 'error', 'message:' => 'Bad credentials 2']);
+        //CONTROLE des paliers
+
+        $i = 1;
+
+        foreach ($paliers as $key => $palier) {
+            if((int)$palier['coef'] <= 0 || (int)$palier['points'] <= 0){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles distance: Les valeurs entieres positives uniquement']);
+            }
+
+            if(isset($paliers[$i]) && (int)$palier['coef'] == $paliers[$i]['coef']){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles distance: Pas de doublon de coefficient']);
+            }
+
+            $i ++;
         }
 
+        //CONTROLE des times
+
+        $i = 1;
+
+        foreach ($times as $key => $time) {
+            if((int)$time['coef'] <= 0 || (int)$time['nb_seconds'] <= 0){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles temps: Les valeurs entieres positives uniquement']);
+            }
+
+            if(isset($times[$i]) && (int)$time['nb_seconds'] == $times[$i]['nb_seconds']){
+                return Writer::json_output($response, 400, ['type:' => 'error', 'message:' => 'Règles temps: Pas de doublon de secondes']);
+            }
+
+            $i ++;
+        }
 
         try{
             $serie = Serie::findOrFail($idSerie);
 
-           // var_dump($serie->city());
-            //exit();
             // Supression des paliers de la base
             $tableauxBase = Palier::where('serie_id','=',$idSerie)->get();
             foreach ($tableauxBase as $palier){
@@ -97,37 +134,6 @@ class RulesController extends BaseController
 
         } catch (ModelNotFoundException $e){
             return Writer::json_output($response, 404, array('type' => 'error', 'message' => 'The requested ressource was not found'));
-        }
-    }
-
-    public function controleRules($tableaux,$value,$resp){
-
-        if(isset($tableaux) && !empty($tableaux)){
-            sort($tableaux);
-            // Plus les coefs sont élevé plus les seconde sont basses
-            $i=1;
-            foreach ($tableaux as $tab){
-                if (isset($tab['coef']) && !empty($tab['coef']) && isset($tab[$value]) && !empty($tab[$value])) {
-                    if(isset($tableaux[$i]['coef']) && !empty($tableaux[$i]['coef']) && isset($tableaux[$i][$value]) && !empty($tableaux[$i][$value])){
-
-                            //les$valuede seconde suivant doivent etre plus grand
-                            if($tab[$value] <= $tableaux[$i][$value]) {
-                                return false;
-                            }
-                    } else {
-                        return true;
-                    }
-                } else {
-                    return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials 3']);
-                }
-                $i++;
-                // Si une des valeurs est en dessous de 0
-                if($tab['coef'] <= 0 || $tab[$value] < 0){
-                    return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials2']);
-                }
-            }
-        } else {
-            return Writer::json_output($resp, 404, array('type' => 'error', 'message' => 'The requested ressource was not found'));
         }
     }
 }

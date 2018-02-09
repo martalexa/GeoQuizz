@@ -17,74 +17,44 @@ class PalierController extends BaseController {
 
     public function createPalier($req, $res, $args){
 
-
-
-        /*
-         * VOIR DANS LE CAS OU LA SERIE À DÉJA UN PALIER AFFECTER
-         *
-         * */
-
         try{
             // verifie l'intégrité de l'id
             $serie = Serie::findOrFail($args['id']);
             $request_body = $req->getParsedBody();
+
             // Si le palier n'est pas vide
             if(isset($request_body['paliers']) && !empty($request_body['paliers'])){
                 $paliers = $request_body['paliers'];
-                // Pour que le tableaux soit dans l'ordre des valeurs de coeff
-                sort($paliers);
-
-                // verifier que à chaque fois que le coef augmente, le nb de points diminue
-                // ensuite vérifier que les valeurs ne soit pas negative
-                $i = 1;
-                foreach ($paliers as $palier){
-                    if (isset($palier['coef']) && !empty($palier['coef']) && isset($palier['points']) && !empty($palier['points'])){
-                        // si le palier suivant existe
-                        if(isset($paliers[$i]['coef']) && !empty($paliers[$i]['coef']) && isset($paliers[$i]['points']) && !empty($paliers[$i]['points'])){
-                            // si le palier courant est inferieur au palier suivant
-
-                                //les points du palier suivant doivent etre plus petit
-                                if($palier['points'] <= $paliers[$i]['points']) {
-                                    return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials']);
-                                }
-
-                        }
-                        $i++;
-                        // Si une des valeurs est en dessous de 0
-                        if($palier['coef'] <= 0 || $palier['points'] < 0){
-                            return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials2']);
-                        }
-                    } else {
-                       return Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials3']);
-                    }
-                }
 
                 $collection = array();
                 foreach ($paliers as $palier){
 
                     $testCoef = Palier::where('coef','=',$palier['coef'])->first();
                     if(!$testCoef){
+
+                        if((int)$palier['coef'] <= 0 || (int)$palier['points'] <= 0){
+                            return Writer::json_output($res, 400, ['type:' => 'error', 'message:' => 'Règles distance: Les valeurs entieres positives uniquement']);
+                        }
+
                         $p = new Palier();
                         $p->serie_id = $serie->id;
-                        // un coef est unique
                         $p->coef = $palier['coef'];
-
                         $p->points = $palier['points'];
-                        array_push($collection, $p);
+
+                        try{
+                            $p->save();
+                            array_push($collection, $p);
+                        } catch (ModelNotFoundException $e){
+                            return Writer::json_output($res,500,['error' => 'Internal Server Error']);
+                        }
                     }
                 }
-
-                foreach($collection as $palier){
-                    $palier->save();
-                }
-                Writer::json_output($res, 201, $collection);
-
+                    return Writer::json_output($res, 201, $collection);
             } else {
-                Writer::json_output($res, 401, ['type:' => 'error', 'message:' => 'Bad credentials']);
+                return Writer::json_output($res, 400, ['type:' => 'error', 'message:' => 'Empty value']);
             }
-
         } catch (ModelNotFoundException $e) {
-            Writer::json_output($res, 404, array('type' => 'error', 'message' => 'The requested ressource was not found'));
+            return Writer::json_output($res, 404, array('type' => 'error', 'message' => 'The requested ressource was not found'));
         }
     }
 }
