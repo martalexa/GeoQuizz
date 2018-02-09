@@ -109,7 +109,6 @@ class RulesController extends BaseController
             foreach ($tableaux as $tab){
                 if (isset($tab['coef']) && !empty($tab['coef']) && isset($tab[$value]) && !empty($tab[$value])) {
                     if(isset($tableaux[$i]['coef']) && !empty($tableaux[$i]['coef']) && isset($tableaux[$i][$value]) && !empty($tableaux[$i][$value])){
-
                             //les$valuede seconde suivant doivent etre plus grand
                             if($tab[$value] <= $tableaux[$i][$value]) {
                                 return false;
@@ -123,7 +122,7 @@ class RulesController extends BaseController
                 $i++;
                 // Si une des valeurs est en dessous de 0
                 if($tab['coef'] <= 0 || $tab[$value] < 0){
-                    return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials2']);
+                    return Writer::json_output($resp, 401, ['type:' => 'error', 'message:' => 'Bad credentials4']);
                 }
             }
         } else {
