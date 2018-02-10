@@ -86,6 +86,10 @@ class PartieController extends BaseController
     			$photos[$key] = $photo;
     		}
     		$result->serie->photos = $photos;
+            $result->serie->rules = [
+                    "paliers" => $serie->paliers()->orderBy('coef', 'ASC')->get(),
+                    "times" => $serie->times()->orderBy('nb_seconds', 'DESC')->get()
+                ];
     		return Writer::json_output($response,201,$result);
 
 
@@ -111,7 +115,7 @@ class PartieController extends BaseController
     		return $notFoundHandler($request,$response);
     	}
     	try {
-    		$partie->score =filter_var($tab["score"],FILTER_SANITIZE_NUMBER_FLOAT);
+    		$partie->score = filter_var($tab["score"],FILTER_SANITIZE_NUMBER_FLOAT);
     		$partie->save();
     		return Writer::json_output($response,200,$partie);
     	} catch (Exception $e) {
