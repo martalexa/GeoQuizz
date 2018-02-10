@@ -109,3 +109,38 @@ services:
           - geoquizz_network
      links:
           - mysql:geoquizz
+
+#######################
+# Frontend
+#######################
+  front.player:
+      image: canals/php
+      container_name: player.geoquizz.local
+      environment:
+          - VHOST_HOSTNAME=player.geoquizz.local
+          - VHOST_DOCROOT=/var/www/player
+  #       - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+  #       - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+      ports:
+          - "10090:80"
+          - "10448:443"
+      volumes :
+          - ./front/player:/var/www/player
+      networks:
+          - geoquizz_network
+
+  front.bo:
+      image: canals/php
+      container_name: bo.geoquizz.local
+      environment:
+          - VHOST_HOSTNAME=bo.geoquizz.local
+          - VHOST_DOCROOT=/var/www/bo
+  #       - http_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+  #       - https_proxy=http://www-cache.iutnc.univ-lorraine.fr:3128/
+      ports:
+          - "10091:80"
+          - "10449:443"
+      volumes :
+          - ./front/bo:/var/www/bo
+      networks:
+          - geoquizz_network

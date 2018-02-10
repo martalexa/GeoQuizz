@@ -4,6 +4,7 @@ require __DIR__ .'/../vendor/autoload.php';
 require __DIR__ .'/../src/includes/db.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use App\Models\City;
 
 class Migrator {
 	
