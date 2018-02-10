@@ -153,69 +153,6 @@ class Migrator {
     }
 }
 
-$cities = array();
-
-$city = new City();
-$city->lat = '48.6843900';
-$city->lng = '6.1849600';
-$city->name = 'Nancy';
-$city->zoom_level = 13;
-array_push($cities, $city);
-
-$city = new City();
-$city->lat = '48.856406';
-$city->lng = '2.3521452';
-$city->name = 'Paris';
-$city->zoom_level = 13;
-array_push($cities, $city);
-
-$city = new City();
-$city->lat = '40.7127753';
-$city->lng = '-74.0059728';
-$city->name = 'New York';
-$city->zoom_level = 11;
-array_push($cities, $city);
-
-$city = new City();
-$city->lat = '51.5073509';
-$city->lng = '-0.12775829999998223';
-$city->name = 'London';
-$city->zoom_level = 11;
-array_push($cities, $city);
-
-$city = new City();
-$city->lat = '52.52000659999999';
-$city->lng = '13.404953999999975';
-$city->name = 'Berlin';
-$city->zoom_level = 11;
-array_push($cities, $city);
-
-$city = new City();
-$city->lat = '55.755826';
-$city->lng = '37.617299900000035';
-$city->name = 'Moscou';
-$city->zoom_level = 11;
-array_push($cities, $city);
-
-$city = new City();
-$city->lat = '41.9027835';
-$city->lng = '12.496365500000024';
-$city->name = 'Rome';
-$city->zoom_level = 11;
-array_push($cities, $city);
-
-$city = new City();
-$city->lat = '39.90419989999999';
-$city->lng = '116.40739630000007';
-$city->name = 'Beijing';
-$city->zoom_level = 11;
-array_push($cities, $city);
-
-//
-foreach ($cities as $city) {
-    $city->save();
-}
-
 $migrator = new Migrator();
 
 $migrator->migrate();
