@@ -20,6 +20,7 @@ Application réalisée dans le cadre de l'atelier 2, LP CISIIE
 
 ## Installation
 
+- Ajouter les hosts virtuels `api.geoquizz.local - web.geoquizz.local - migrate.geoquizz.local - db.geoquizz.local - admin.geoquizz.local - player.geoquizz.local - bo.geoquizz.local`
 - Installer les dépendances du projet `$ composer update`
 - Créer le schéma de la base de données en exécutant le lien `http://migrate.geoquizz.local:10083/migrate.php`
 - Aller sur l'interface sur le lien `http://admin.geoquizz.local:8082`
