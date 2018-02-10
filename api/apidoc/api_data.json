@@ -1,0 +1,1060 @@
+[
+  {
+    "type": "post",
+    "url": "/admin/signin",
+    "title": "Connexion",
+    "group": "admin",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json;charset=utf-8</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Basic</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>username de la personne</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Mot de passe</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token d'identification</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "{\n\t\"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZ2VvcXVpenoubG9jYWxcL2F1dGgiLCJhdWQiOiJodHRwOlwvXC9hcGkuZ2VvcXVpenoubG9jYWxcLyIsImlhdCI6MTUxODIxNzcxNiwiZXhwIjoxNTE4ODIyNTE2LCJ1aWQiOjEwfQ.8KmYNSDuyu2qpURGtf08Cbf1U5xYhn7smbtnFCpp7GfyTvjSzgidFafkIP3GrMs4NOIgoMKKCr-4Q7XM5rugWg\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "admin",
+    "name": "PostAdminSignin"
+  },
+  {
+    "type": "post",
+    "url": "/admin/signup",
+    "title": "Création d'un compte",
+    "group": "admin",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json;charset=utf-8</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>username de la personne</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Mot de passe</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "PUT /parties/:token HTTP/1.1\nHost: api.geoquizz.local:10080 \nContent-Type:application/json;charset=utf-8\n\n{\n\t\"username\": \"Jean Michel\",\n\t\"password\": \"lemeilleurpassword\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant du compte</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username du compte</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"username\": \"Jean Michel\",\n\t\"id\": 10,\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "admin",
+    "name": "PostAdminSignup"
+  },
+  {
+    "type": "get",
+    "url": "/parties",
+    "title": "Lites des parties",
+    "group": "parties",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "nb_photos",
+            "description": "<p>Nombre de photos choisi par la personne</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "state",
+            "description": "<p>Etat de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "player_username",
+            "description": "<p>Pseudo du joueur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "score",
+            "description": "<p>Score du joueur pour cette partie</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"id\": 7,\n\t\"token\": \"6f15d12b26e7deaa722edb44f857e185b1f6b68909caa6c0911927bce395e489\",\n\t\"nb_photos\": 5,\n\t\"state\": 0,\n\t\"player_username\": \"Michel\",\n\t\"score\": 5\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "parties",
+    "name": "GetParties"
+  },
+  {
+    "type": "get",
+    "url": "/parties/:id",
+    "title": "Avoir une partie",
+    "group": "parties",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "id",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant de la partie</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "nb_photos",
+            "description": "<p>Nombre de photos choisi par la personne</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "state",
+            "description": "<p>Etat de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "player_username",
+            "description": "<p>Pseudo du joueur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "score",
+            "description": "<p>Score du joueur pour cette partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "serie",
+            "description": "<p>Série choisi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.id",
+            "description": "<p>Identifiant de la serie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.distance",
+            "description": "<p>Distance de référence</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.image",
+            "description": "<p>Image de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.name",
+            "description": "<p>Nom de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "serie.city",
+            "description": "<p>Description de la ville de référence de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.id",
+            "description": "<p>Identifiant de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.city.name",
+            "description": "<p>Nom de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.lat",
+            "description": "<p>Latitude de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.lng",
+            "description": "<p>Longitude de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.zoom_level",
+            "description": "<p>Zoom de référence pou la carte leaflet</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"id\": 7,\n\t\"token\": \"6f15d12b26e7deaa722edb44f857e185b1f6b68909caa6c0911927bce395e489\",\n\t\"nb_photos\": 15,\n\t\"state\": 0,\n\t\"player_username\": \"Michel\",\n\t\"score\": 5,\n\t\"serie\": {\n\t\t\"id\": 2,\n\t\t\"distance\": \"100\",\n\t\t\"updated_at\": \"2018-02-05 14:11:47\",\n\t\t\"created_at\": \"2018-02-05 14:11:47\",\n\t\t\"image\": \"\",\n\t\t\"name\": \"\",\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Nancy\",\n\t\t\t\"lat\": \"48.6843900\",\n\t\t\t\"lng\": \"6.1849600\",\n\t\t\t\"zoom_level\": 13\n\t\t}\n\t}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "parties",
+    "name": "GetPartiesId"
+  },
+  {
+    "type": "post",
+    "url": "/partie",
+    "title": "Création d'une partie (jouer)",
+    "group": "parties",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json;charset=utf-8</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "player_username",
+            "description": "<p>Pseudo du joueur</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nb_photos",
+            "description": "<p>Nombre de photo choisi</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "serie_id",
+            "description": "<p>Identifiant de la série</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "POST /parties HTTP/1.1\nHost: api.geoquizz.local:10080 \nContent-Type:application/json;charset=utf-8\n\n{\n\t\"player_username\": \"Alexandro\",\n\t\"nb_photos\": 15,\n\t\"serie_id\": 7\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "nb_photos",
+            "description": "<p>Nombre de photos choisi par la personne</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "state",
+            "description": "<p>Etat de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "player_username",
+            "description": "<p>Pseudo du joueur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "score",
+            "description": "<p>Score du joueur pour cette partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "serie",
+            "description": "<p>Série choisi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.id",
+            "description": "<p>Identifiant de la serie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.distance",
+            "description": "<p>Distance de référence</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.image",
+            "description": "<p>Image de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.name",
+            "description": "<p>Nom de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "serie.city",
+            "description": "<p>Description de la ville de référence de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.id",
+            "description": "<p>Identifiant de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.city.name",
+            "description": "<p>Nom de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.lat",
+            "description": "<p>Latitude de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.lng",
+            "description": "<p>Longitude de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.zoom_level",
+            "description": "<p>Zoom de référence pou la carte leaflet</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "serie.city.photos",
+            "description": "<p>Photos de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.photos.id",
+            "description": "<p>Identifiant de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.city.photos.description",
+            "description": "<p>Description de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serie.city.photos.url",
+            "description": "<p>url de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.photos.lat",
+            "description": "<p>Latitude du lieu de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "serie.city.photos.lng",
+            "description": "<p>Longitude du lieu de la photo</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"player_username\": \"Alexandro\",\n\t\"id\": 80,\n\t\"token\": \"6f15d12b26e7deaa722edb44f857e185b1f6b68909caa6c0911927bce395e489\",\n\t\"nb_photos\": 15,\n\t\"state\": 0,\n\t\"score\": 5,\n\t\"serie\": {\n\t\t\"id\": 2,\n\t\t\"distance\": \"100\",\n\t\t\"updated_at\": \"2018-02-05 14:11:47\",\n\t\t\"created_at\": \"2018-02-05 14:11:47\",\n\t\t\"image\": \"\",\n\t\t\"name\": \"\",\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Nancy\",\n\t\t\t\"lat\": \"48.6843900\",\n\t\t\t\"lng\": \"6.1849600\",\n\t\t\t\"zoom_level\": 13\n\t\t},\n\t\t\"photos\": [{\n\t\t\t\"id\": 4,\n\t\t\t\"description\": \"Le musée de l'IUT\"\n\t\t\t\"url\": \"http://web.geaoquizz.local:10085/uploads/laphoto.png\",\n\t\t\t\"lat\": \"48.6843900\",\n\t\t\t\"lng\": \"6.1849600\",\n\t\t}]\n\t}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "parties",
+    "name": "PostPartie"
+  },
+  {
+    "type": "put",
+    "url": "/partie/:token",
+    "title": "Modification du score d'une partie",
+    "group": "parties",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de la partie</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "score",
+            "description": "<p>Score de la partie</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "PUT /parties/:token HTTP/1.1\nHost: api.geoquizz.local:10080 \nContent-Type:application/json;charset=utf-8\n\n{\n\t\"score\": 30\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json;charset=utf-8</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "nb_photos",
+            "description": "<p>Nombre de photos choisi par la personne</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "state",
+            "description": "<p>Etat de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "player_username",
+            "description": "<p>Pseudo du joueur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "score",
+            "description": "<p>Score du joueur pour cette partie</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"player_username\": \"Alexandro\",\n\t\"id\": 80,\n\t\"token\": \"6f15d12b26e7deaa722edb44f857e185b1f6b68909caa6c0911927bce395e489\",\n\t\"nb_photos\": 15,\n\t\"state\": 0,\n\t\"score\": 30\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "parties",
+    "name": "PutPartieToken"
+  },
+  {
+    "type": "put",
+    "url": "/partie/:token/state",
+    "title": "Modification d'une partie",
+    "group": "parties",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de la partie</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "state",
+            "description": "<p>Etat de la partie</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "PUT /parties/:token HTTP/1.1\nHost: api.geoquizz.local:10080 \nContent-Type:application/json;charset=utf-8\n\n{\n\t\"state\": 1\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json;charset=utf-8</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "nb_photos",
+            "description": "<p>Nombre de photos choisi par la personne</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "state",
+            "description": "<p>Etat de la partie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "player_username",
+            "description": "<p>Pseudo du joueur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "score",
+            "description": "<p>Score du joueur pour cette partie</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"player_username\": \"Alexandro\",\n\t\"id\": 80,\n\t\"token\": \"6f15d12b26e7deaa722edb44f857e185b1f6b68909caa6c0911927bce395e489\",\n\t\"nb_photos\": 15,\n\t\"state\": 1,\n\t\"score\": 30\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "parties",
+    "name": "PutPartieTokenState"
+  },
+  {
+    "type": "get",
+    "url": "/series/:id",
+    "title": "Avoir le détail d'une serie",
+    "group": "series",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>id de la serie</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identifiant de la serie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "distance",
+            "description": "<p>Distance de ref pour le calcul du score</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "image",
+            "description": "<p>Image de la serie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Nom de la serie</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "city",
+            "description": "<p>Description de la ville de référence de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "city.id",
+            "description": "<p>Identifiant de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "city.name",
+            "description": "<p>Nom de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "city.lat",
+            "description": "<p>Latitude de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "city.lng",
+            "description": "<p>Longitude de la ville</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "city.zoom_level",
+            "description": "<p>Zoom de référence pou la carte leaflet</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "paliers",
+            "description": "<p>Palier/regle pour le calcul du score</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "paliers.id",
+            "description": "<p>Identifiant du palier</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "paliers.coef",
+            "description": "<p>Coefficient du palier</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "paliers.points",
+            "description": "<p>Points pour ce palier</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "paliers.serie_id",
+            "description": "<p>Identifiant de la serie à laquelle le palier appartient</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "times",
+            "description": "<p>Temps pour le calcul du score</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "times.id",
+            "description": "<p>Identifiant du timer</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "times.coef",
+            "description": "<p>Coefficient du palier</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "times.nb_seconds",
+            "description": "<p>temps en seconde pour aquérir le nombre de point de ce palier</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "times.serie_id",
+            "description": "<p>Identifiant de la serie à laquelle le timer appartient</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "photos",
+            "description": "<p>Photos de la série</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "photos.id",
+            "description": "<p>Identifiant de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "photos.description",
+            "description": "<p>Description de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "photos.url",
+            "description": "<p>url de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "photos.lat",
+            "description": "<p>Latitude du lieu de la photo</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "photos.lng",
+            "description": "<p>Longitude du lieu de la photo</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n\t{\n\t\t\"id\": 17,\n\t\t\"distance\": \"52\",\n\t\t\"updated_at\": \"2018-02-09 18:20:20\",\n\t\t\"created_at\": \"0000-00-00 00:00:00\",\n\t\t\"image\": \"e2f69e70-0dc5-11e8-96d6-0242ac130005.png\",\n\t\t\"name\": \"frfrf\",\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Nancy\",\n\t\t\t\"lat\": \"48.6843900\",\n\t\t\t\"lng\": \"6.1849600\",\n\t\t\t\"zoom_level\": 13\n\t\t},\n\t\t\"paliers\": [{\n\t\t\t\"id\": 37,\n\t\t\t\"coef\": 1,\n\t\t\t\"points\": 5,\n\t\t\t\"serie_id\": 17\n\t\t}],\n\t\t\"times\": [{\n\t\t\t\"id\": 37,\n\t\t\t\"nb_seconds\": 5,\n\t\t\t\"coef\": 4,\n\t\t\t\"serie_id\": 17\n\t\t}],\n\t\t\"photos\": [{\n\t\t\t\"id\": 4,\n\t\t\t\"description\": \"Le musée de l'IUT\"\n\t\t\t\"url\": \"http://web.geaoquizz.local:10085/uploads/laphoto.png\",\n\t\t\t\"lat\": \"48.6843900\",\n\t\t\t\"lng\": \"6.1849600\",\n\t\t}]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "series",
+    "name": "GetSeriesId"
+  },
+  {
+    "type": "get",
+    "url": "/series/:id/count",
+    "title": "Renvoie le nombre de photo d'une série",
+    "group": "series",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>id de la serie</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n12",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes.php",
+    "groupTitle": "series",
+    "name": "GetSeriesIdCount"
+  }
+]

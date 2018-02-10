@@ -151,39 +151,8 @@ $app->get('/parties/{id}[/]', 'PartieController:getPartie')->setName('get_partie
  */
 $app->post('/parties[/]','PartieController:createPartie')->setName('post_partie')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['nb_photos','serie_id','player_username']);
 
-/**
- * @api {put} /partie/:token Modification du score d'une partie
- * @apiGroup parties
- * @apiVersion 1.0.0
- * @apiParam {String} token Token de la partie
- * @apiHeader {String} Content-Type application/json;charset=utf-8
- * @apiParam {Number} score Score de la partie
- * @apiParamExample {json} Input
- *	PUT /parties/:token HTTP/1.1
- *	Host: api.geoquizz.local:10080 
- *	Content-Type:application/json;charset=utf-8
- * 	
- *	{
- *		"score": 30
- *	}
- * @apiSuccess {Number} id Identifiant de la partie
- * @apiSuccess {String} token Token de la partie
- * @apiSuccess {Number} nb_photos Nombre de photos choisi par la personne
- * @apiSuccess {Number} state Etat de la partie
- * @apiSuccess {String} player_username Pseudo du joueur
- * @apiSuccess {Number} score Score du joueur pour cette partie
- * @apiSuccessExample {json} Success
- *	HTTP/1.1 200 OK
- *	{
- *		"player_username": "Alexandro",
- *		"id": 80,
- *		"token": "6f15d12b26e7deaa722edb44f857e185b1f6b68909caa6c0911927bce395e489",
- *		"nb_photos": 15,
- *		"state": 0,
- *		"score": 30
- *	}
- */
-$app->put('/parties/{token}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
+
+//$app->put('/parties/{token}[/]','PartieController:updateScore')->setName('put_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 
 /**
  * @api {put} /partie/:token/state Modification d'une partie
@@ -219,7 +188,38 @@ $app->put('/parties/{token}[/]','PartieController:updateScore')->setName('put_sc
  */
 $app->patch('/parties/{token}/state','PartieController:updateState')->setName('patch_status')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['state']);
 
-// POURQUOI CETTE ROUTE ?????
+/**
+ * @api {patch} /partie/:token Modification du score d'une partie
+ * @apiGroup parties
+ * @apiVersion 1.0.0
+ * @apiParam {String} token Token de la partie
+ * @apiHeader {String} Content-Type application/json;charset=utf-8
+ * @apiParam {Number} score Score de la partie
+ * @apiParamExample {json} Input
+ *	PUT /parties/:token HTTP/1.1
+ *	Host: api.geoquizz.local:10080 
+ *	Content-Type:application/json;charset=utf-8
+ * 	
+ *	{
+ *		"score": 30
+ *	}
+ * @apiSuccess {Number} id Identifiant de la partie
+ * @apiSuccess {String} token Token de la partie
+ * @apiSuccess {Number} nb_photos Nombre de photos choisi par la personne
+ * @apiSuccess {Number} state Etat de la partie
+ * @apiSuccess {String} player_username Pseudo du joueur
+ * @apiSuccess {Number} score Score du joueur pour cette partie
+ * @apiSuccessExample {json} Success
+ *	HTTP/1.1 200 OK
+ *	{
+ *		"player_username": "Alexandro",
+ *		"id": 80,
+ *		"token": "6f15d12b26e7deaa722edb44f857e185b1f6b68909caa6c0911927bce395e489",
+ *		"nb_photos": 15,
+ *		"state": 0,
+ *		"score": 30
+ *	}
+ */
 $app->patch('/parties/{token}/score','PartieController:updateScore')->setName('patch_score')->add(\App\Middleware\CheckFormulaire::class.':checkFormulaire')->setArgument('fields',['score']);
 // Routes Series
 $app->get('/series[/]', 'SerieController:getSeries')->setName('get_series');

@@ -65,7 +65,7 @@ class UserController extends BaseController
         if(!$req->hasHeader("Authorization")){
 
             // JE RENVOIE LE TYPE D'AUTH NECESSAIRE
-            $resp = $resp->withHeader('WWW-Authenticate', 'Basic realm="api.lbs.local"');
+            $resp = $resp->withHeader('WWW-Authenticate', 'Basic realm="api.geoquizz.local"');
             return Writer::json_output($resp, 401, ['type' => 'error', 'error' => 401, 'message' => 'no authorization header present']);
         }
 
