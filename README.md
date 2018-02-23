@@ -1,4 +1,4 @@
-# Flashcards
+# Geoquizz - Backend
 
 Application à réaliser dans le cadre de l'atelier 2, LP CISIIE
 
