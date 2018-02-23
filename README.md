@@ -6,6 +6,9 @@ Application réalisée dans le cadre du projet tutoré, LP CISIIE
 
 - Corentin LUX
 - Mohamed ALHASNE
+- Gerardo Gutierrez
+- Thomas Pascuzzo
+- Gerardo Razo Jabana
 
 ## Pré-requis
 
