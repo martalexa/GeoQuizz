@@ -1,30 +1,25 @@
-# Geoquizz Backend
+# Flashcards (Backoffice + API)
 
-Application réalisée dans le cadre de l'atelier 2, LP CISIIE
-
+Application réalisée dans le cadre du projet tutoré, LP CISIIE
 
 ## Réalisée Par
 
-- Alexandra MARTIN
+- Corentin LUX
 - Mohamed ALHASNE
-- Nicolas BOBELET
-- Yann Dumas
-- Daniel RICKLIN
 
 ## Pré-requis
 
-- PHP 7 +
+- PHP 7+
 - Apache
 - docker-compose
 - composer
 
 ## Installation
 
-- Ajouter les hosts virtuels `api.geoquizz.local - web.geoquizz.local - migrate.geoquizz.local - db.geoquizz.local - admin.geoquizz.local - player.geoquizz.local - bo.geoquizz.local`
+- Ajouter les hosts virtuels `api.flashcards.local - admin.flashcards.local - web.flashcards.local - dbadmin.flashcards.local`
 - Installer les dépendances du projet `$ composer update`
-- Créer le schéma de la base de données en exécutant le lien `http://migrate.geoquizz.local:10083/migrate.php`
-- Aller sur l'interface sur le lien `http://admin.geoquizz.local:8082`
-- Se connecter avec `host=geoquizz, username=admin, password:admin` et selectionner la base de données `geoquizz`
-- Importer les villes et la série par défaut en important le fichier `./data/data.sql`
-- Acceder au jeu sur le lien `http://player.geoquizz.local:10090`
-- Acceder au backoffice de gestion sur le lien `http://bo.geoquizz.local:10091`
+- Aller sur l'interface Adminer sur le lien `http://dbadmin.flashcards.local:8082`
+- Se connecter avec `host=flashcards, username=root, password:root` et selectionner la base de données `flashcards`
+- Importer le schèma de la base de données ainsi que les données de test (fixtures) en exécutant le fichier `./flashcards.sql`
+- Se connecter à l'espace admin sur le lien `http://admin.flashcards.local:10081`
+- La racine des URIs de l'API est `http://api.flashcards.local:10080`
